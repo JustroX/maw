@@ -1,0 +1,22 @@
+{
+  "name": "maw",
+  "version": "1.0.0",
+  "description": "Server Code for Maw Collections",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustroX/maw.git"
+  },
+  "author": "Justine Che T. Romero, Jude Wincel P. Marino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustroX/maw/issues"
+  },
+  "homepage": "https://github.com/JustroX/maw#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
