@@ -10,10 +10,11 @@ Justine Che T. Romero
 
 var app; //express app
 
-
-/*
-	refer to Trello for database definitions
-*/
+var settings =
+{
+	geneset : 0,
+	
+}
 
 
 exports.init = (app)=>
@@ -34,3 +35,6 @@ exports.init = (app)=>
 	app.post('/breeding/api/asset/edit',(req,res)=>{});
 	app.post('/breeding/api/asset/delete',(req,res)=>{});
 }
+
+
+function view_asset()
