@@ -19,6 +19,11 @@ var settings =
 
 exports.init = (app)=>
 {
+	//gui
+	app.get('/breeding/',(req,res)=>{
+		res.render('breeding-api/index');
+	});
+
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
 	app.post('/breeding/api/geneset/delete',(req,res)=>{});
@@ -36,5 +41,3 @@ exports.init = (app)=>
 	app.post('/breeding/api/asset/delete',(req,res)=>{});
 }
 
-
-function view_asset()
