@@ -9,6 +9,8 @@ Justine Che T. Romero
 *******************/
 
 var app; //express app
+var pth = require('path'); //path module
+
 
 var settings =
 {
@@ -22,6 +24,13 @@ exports.init = (app)=>
 	//gui
 	app.get('/breeding/',(req,res)=>{
 		res.render('breeding-api/index');
+	});
+
+	//resources
+	app.get('/breeding/res/*',(req,res)=>{		
+		var path = req.originalUrl.substr(13,req.originalUrl.length-13);
+		console.log(path);
+		res.sendFile(pth.join(__dirname,"/bower_components/",path));
 	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
