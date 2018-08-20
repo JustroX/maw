@@ -1,0 +1,22 @@
+<div ng-controller='authController'>
+	<div class="container text-center">
+		<br><br><br><br><br><br>
+		<h5>Breeding API</h5>
+		<p>Please log in as Administrator to continue.</p>
+		<div class="container col-md-4">
+			<hr>
+				<form ng-submit='form.submit()'>
+					<label>Username</label> <br>		
+			 		<input ng-model='form.username' class="form-control" type="text" name="username">
+
+			 		<br>
+
+					<label>Password</label> <br>		
+			 		<input ng-model='form.password' class="form-control" type="password" name="password">
+			 		<br>
+			 		<button class="btn btn-primary">Log In</button>
+				</form>
+		</div>
+	</div>
+</div>
+

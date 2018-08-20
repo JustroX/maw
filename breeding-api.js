@@ -26,11 +26,17 @@ exports.init = (app)=>
 		res.render('breeding-api/index');
 	});
 
+
 	//resources
 	app.get('/breeding/res/*',(req,res)=>{		
 		var path = req.originalUrl.substr(13,req.originalUrl.length-13);
-		console.log(path);
 		res.sendFile(pth.join(__dirname,"/bower_components/",path));
+	});
+
+	app.get('/breeding/pages/*',(req,res)=>{		
+		var path = req.originalUrl.substr(15,req.originalUrl.length-15);
+		console.log(path);
+		res.render('breeding-api/'+path);
 	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
