@@ -18,6 +18,9 @@ app.controller("authController",($scope,$http,$location) => {
 	$scope.form= {username:"",password:""};
 	$scope.form.submit = () =>
 	{
-		;
+		$http.post('/breeding/auth',{form: $scope.form}).then((res)=>{
+			res = res.data;
+			
+		})
 	}
 });

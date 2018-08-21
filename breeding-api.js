@@ -15,7 +15,7 @@ var pth = require('path'); //path module
 var settings =
 {
 	geneset : 0,
-	
+	SECRET: "5526B47F0B2B5B87AE1EB88FA1CAC63F84800F0019B56F6F80B68C0850B63CDC",
 }
 
 
@@ -37,6 +37,12 @@ exports.init = (app)=>
 		var path = req.originalUrl.substr(15,req.originalUrl.length-15);
 		console.log(path);
 		res.render('breeding-api/'+path);
+	});
+
+
+	//auth
+	app.post('/breeding/auth',(req,res)=>{
+		
 	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
