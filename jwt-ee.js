@@ -1,4 +1,28 @@
+/********************
+
+Maw JWT module
+(c) 2018 Eternity Echo
+
+Authors:
+Justine Che T. Romero
+
+*******************/
+
+
 var SHA256 = require('crypto-js/SHA256');
+
+exports.SECRET = "5526B47F0B2B5B87AE1EB88FA1CAC63F84800F0019B56F6F80B68C0850B63CDC";
+
+function btoa(str)
+{
+	return Buffer.from(str).toString('base64');
+}
+
+function atob(enc)
+{
+	return Buffer.from(enc,'base64').toString();
+}
+
 
 
 var generate_head = (req) =>
@@ -7,9 +31,8 @@ var generate_head = (req) =>
 }
 
 
-var generate_token = (payload,salt = "")=>
+var generate_token = (payload,salt = exports.SECRET)=>
 {
-
 	var a = 
 	{
 		head :generate_head(),
@@ -17,5 +40,23 @@ var generate_token = (payload,salt = "")=>
 	};
 
 	a.hash = SHA256( JSON.stringify(a.head) + JSON.stringify(a.payload) + salt ).toString();
-	return atob(a);
+	return btoa(JSON.stringify(a));
 } 
+
+var validate_token = ( token ) =>
+{
+	var a = atob(token);
+	a = JSON.parse(a);
+	return ( a.hash == SHA256( JSON.stringify(a.head) + JSON.stringify(a.payload) + salt ) );
+}
+
+var parse_token = ( token ) =>
+{
+	var a = atob(token);
+	a = JSON.parse(a);
+	return a.payload;
+}
+
+exports.new = generate_token;
+exports.validate = validate_token;
+exports.parse = parse_token;

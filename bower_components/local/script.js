@@ -20,7 +20,7 @@ app.controller("authController",($scope,$http,$location) => {
 	{
 		$http.post('/breeding/auth',{form: $scope.form}).then((res)=>{
 			res = res.data;
-			
+				
 		})
 	}
 });

@@ -10,12 +10,11 @@ Justine Che T. Romero
 
 var app; //express app
 var pth = require('path'); //path module
-
+var jwt = require('./jwt-ee.js');
 
 var settings =
 {
 	geneset : 0,
-	SECRET: "5526B47F0B2B5B87AE1EB88FA1CAC63F84800F0019B56F6F80B68C0850B63CDC",
 }
 
 
@@ -42,7 +41,13 @@ exports.init = (app)=>
 
 	//auth
 	app.post('/breeding/auth',(req,res)=>{
-		
+
+		let usename = req.body.form.username;
+		let password = req.body.form.password;
+
+		password = SHA256(password).toString();
+
+		//check database if usename and password exists
 	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
