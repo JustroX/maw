@@ -11,12 +11,23 @@ Justine Che T. Romero
 var app; //express app
 var pth = require('path'); //path module
 var jwt = require('./jwt-ee.js');
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost:27017/';
+var db;
+
+var SHA256 = require('crypto-js/SHA256');
 
 var settings =
 {
 	geneset : 0,
+	secret: "5526B47F0B2B5B87AE1EB88FA1CAC63F84800F0019B56F6F80B68C0850B63CDC"
 }
 
+MongoClient.connect(url , (err,dbo) =>{
+	if(err) throw err;
+	db = dbo.db('local');
+	console.log("Succesfully connected to Breeding API database. ");	
+});
 
 exports.init = (app)=>
 {
@@ -42,12 +53,15 @@ exports.init = (app)=>
 	//auth
 	app.post('/breeding/auth',(req,res)=>{
 
-		let usename = req.body.form.username;
+		let username = req.body.form.username;
 		let password = req.body.form.password;
 
-		password = SHA256(password).toString();
+		password = SHA256(password + settings.secret).toString();
 
-		//check database if usename and password exists
+		db.collection('user').findOne({username:username,password:password},(err,result)=>{
+			if(err) throw err;
+			console.log(result);
+		});
 	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
@@ -65,5 +79,7 @@ exports.init = (app)=>
 	app.post('/breeding/api/asset/add',(req,res)=>{});
 	app.post('/breeding/api/asset/edit',(req,res)=>{});
 	app.post('/breeding/api/asset/delete',(req,res)=>{});
+
+
 }
 
