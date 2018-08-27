@@ -30,11 +30,10 @@ breedingAPI.init(app);
 
 
 
-/*
 
-	... Jude's code here ...
-
-*/
+app.get("/", (req,res)=> {
+	res.send('hello');
+})
 
 
 
