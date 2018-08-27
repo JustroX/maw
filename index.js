@@ -32,6 +32,7 @@ breedingAPI.init(app);
 
 
 app.get("/", (req,res)=> {
+	console.log("Yeyeye");
 	res.send('hello');
 })
 
