@@ -6,6 +6,13 @@
 		<div class="container col-md-4">
 			<hr>
 				<form ng-submit='form.submit()'>
+
+					<div ng-if='auth.failed' class="alert alert-danger">
+						Authentication failed. Please Try again.
+					</div>
+					<div ng-if='auth.load'>
+						Loading...
+					</div>
 					<label>Username</label> <br>		
 			 		<input ng-model='form.username' class="form-control" type="text" name="username">
 

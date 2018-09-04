@@ -60,7 +60,15 @@ exports.init = (app)=>
 
 		db.collection('user').findOne({username:username,password:password},(err,result)=>{
 			if(err) throw err;
-			console.log(result);
+
+			if(result)
+			{
+				//generate token
+				var  token = jwt.new({username:username});
+				res.send({ token : token })
+			}
+			else
+				res.send({err:"AUTH_FAILED"});
 		});
 	});
 
