@@ -77,3 +77,41 @@ app.controller("authController",($scope,$http,$location) => {
 		})
 	}
 });
+
+
+app.controller("dashboardController",($scope,$http,$location) => {
+
+	//UTIL FUNCTIONS
+	$scope.logout = ()=>
+	{
+		cookie.set('breeding-api-auth-token',{},-1);
+		$location.path('/login');
+	}
+
+	$scope.is_here = (path) =>
+	{
+		var same = false;
+		path = path.split('/');
+		for(let i in path)
+			same |= (path[i] == $scope.location[i]);	
+		return same;
+	}
+	$scope.goto = (path) =>
+	{
+		$scope.location = path.split('/');
+		$scope.pages[$scope.location[0]].onload();
+	}
+
+	$scope.location = [];
+	$scope.pages = {};
+	$scope.user = {};
+
+	//open token
+	if(!cookie.get('breeding-api-auth-token')) 
+			$location.path('/'); 
+	var payload= JSON.parse(atob(token)).payload;
+	$scope.user.username = payload.username;
+	$scope.user.priv = payload.priv;
+
+
+});

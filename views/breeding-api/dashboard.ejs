@@ -1,17 +1,20 @@
-<div class="container">
+<div class="container" ng-controller='dashboardController'>
 		<br>	<br>		
 		<h4>Breeding API dashboard</h4>
+		<b><small> {{ user.username }} | <a ng-click='logout()' href="javascript:void(0)">Log Out</a> </small></b>
 		<br>	<br>	
 		<div class="row">
 				<div class="col-md-3">
-					<div class="card">
-							<div class="card-body">	
-								<b>	Administrator </b> <br>	
-								<ul>
-									<li>Users</li>
-								</ul>
-							</div>	
-					</div>	<br>	
+					<div  ng-if=' user.priv.includes("admin") '>
+						<div class="card">
+								<div class="card-body">	
+									<b>	Administrator </b> <br>	
+									<ul>
+										<li> <a href="javascript:void(0)" ng-click='goto("/users")'>Users</a></li>
+									</ul>
+								</div>	
+						</div>	<br>	
+					</div>
 					<div class="card">
 							<div class="card-body">	
 								<b>	Maw </b> <br>	

@@ -64,8 +64,8 @@ exports.init = (app)=>
 			if(result)
 			{
 				//generate token
-				var  token = jwt.new({username:username});
-				res.send({ token : token })
+				var  token = jwt.new({username:username, priv: result.priv });
+				res.send({ token : token });
 			}
 			else
 				res.send({err:"AUTH_FAILED"});
