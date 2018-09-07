@@ -99,12 +99,28 @@ app.controller("dashboardController",($scope,$http,$location) => {
 	$scope.goto = (path) =>
 	{
 		$scope.location = path.split('/');
-		$scope.pages[$scope.location[0]].onload();
+		$scope.pages[$scope.location.join('/')].run();
+	}
+	$scope.addPage = (path,fn) =>
+	{
+		if(!$scope.pages[path])
+			$scope.pages[path] = {};
+		$scope.pages[path].run = ()=>{
+			fn($scope.pages[path]);
+		};
 	}
 
-	$scope.location = [];
+	$scope.location = ["users"];
 	$scope.pages = {};
 	$scope.user = {};
+
+
+	$scope.addPage('users', (page) =>{
+	} );
+
+
+	//default page
+	setTimeout(()=>{$scope.goto('users');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 

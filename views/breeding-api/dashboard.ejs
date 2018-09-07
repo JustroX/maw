@@ -10,7 +10,7 @@
 								<div class="card-body">	
 									<b>	Administrator </b> <br>	
 									<ul>
-										<li> <a href="javascript:void(0)" ng-click='goto("/users")'>Users</a></li>
+										<li> <a href="javascript:void(0)" ng-click='goto("users")'>Users</a></li>
 									</ul>
 								</div>	
 						</div>	<br>	
@@ -46,6 +46,37 @@
 											<b>HOME</b> > Geneset > Genes > Feature 1
 									</div>
 							</div>
+					</div>
+
+					<div ng-if='is_here("users")'>
+						<br>
+						<div class="card">
+							<div class="card-body">
+								<small>Root Access</small>
+								<b>Users</b>
+								<hr>
+								<table class="table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Priveledges</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat='i in [1,2,3,4,5]'>
+											<td>1</td>
+											<td>Justine Che T. Romero</td>
+											<td>Admin</td>
+											<td>
+												Edit Remove
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 		</div>
