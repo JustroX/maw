@@ -29,6 +29,28 @@ MongoClient.connect(url , (err,dbo) =>{
 	console.log("Succesfully connected to Breeding API database. ");	
 });
 
+function validate(priv, req, res, f)
+{
+	var payload = jwt.validate( req.body.token );
+	if(payload)
+	{
+		db.collection('user').findOne({username: payload.username},(err,result)=>{
+			if(err) throw err;
+			if(result)
+			{
+				if(result.priv.includes(priv))
+					f(result._id);
+				else
+					res.send({err:'PERMISSION_DENIED'});
+			}
+			else
+				res.send({err:'USER_NOT_FOUND'});
+		});
+	}
+	else
+		res.send({err:"TOKEN_INTEGRITY_FAILED"});
+}
+
 exports.init = (app)=>
 {
 	//gui
@@ -69,6 +91,15 @@ exports.init = (app)=>
 			}
 			else
 				res.send({err:"AUTH_FAILED"});
+		});
+	});
+
+	app.post('/breeding/users',(req,res)=>{
+		validate("admin",req,res,(_id)=>{
+			db.collection('user').find({},{projection:{	_id: 1, username: 1, name: 1, priv: 1, email: 1 }}).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result);
+			})
 		});
 	});
 

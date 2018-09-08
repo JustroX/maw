@@ -1,6 +1,6 @@
 /********************
 
-Maw JWT module
+JWT module
 (c) 2018 Eternity Echo
 
 Authors:
@@ -43,16 +43,18 @@ var generate_token = (payload,salt = exports.SECRET)=>
 	return btoa(JSON.stringify(a));
 } 
 
-var validate_token = ( token ) =>
+var validate_token = ( token , salt = exports.SECRET) =>
 {
-	var a = atob(token);
+	let a = atob(token);
 	a = JSON.parse(a);
-	return ( a.hash == SHA256( JSON.stringify(a.head) + JSON.stringify(a.payload) + salt ) );
+	if(( a.hash == SHA256( JSON.stringify(a.head) + JSON.stringify(a.payload) + salt ).toString() ))
+		return a.payload;
+	return false;
 }
 
 var parse_token = ( token ) =>
 {
-	var a = atob(token);
+	let a = atob(token);
 	a = JSON.parse(a);
 	return a.payload;
 }

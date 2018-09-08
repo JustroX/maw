@@ -116,6 +116,13 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 
 	$scope.addPage('users', (page) =>{
+		$http.post('/breeding/users',{token:token}).then((res)=>{
+			res = res.data;
+			if(res.err)
+				console.log(res.err);
+			else
+				page.list = res;
+		});
 	} );
 
 

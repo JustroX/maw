@@ -55,22 +55,34 @@
 								<small>Root Access</small>
 								<b>Users</b>
 								<hr>
+								<div class="row">
+									<div class="col-md-6">
+										<input placeholder="Search user..." type="text" class="form-control">
+									</div>
+									<div class="col-md-6">
+										<button class="btn btn-sm btn-success">Add New</button>
+									</div>
+								</div>
+								<hr>
 								<table class="table">
 									<thead>
 										<tr>
 											<th>#</th>
-											<th>Name</th>
+											<th>Username</th>
+											<th>Email</th>
 											<th>Priveledges</th>
 											<th>Actions</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat='i in [1,2,3,4,5]'>
-											<td>1</td>
-											<td>Justine Che T. Romero</td>
-											<td>Admin</td>
+										<tr ng-repeat='i in pages.users.list'>
+											<td>{{ $index + 1 }}</td>
+											<td>{{ i.username }}</td>
+											<td>{{ i.email }}</td>
+											<td>{{ i.priv.join(" , ") }}</td>
 											<td>
-												Edit Remove
+												<button class="btn btn-default btn-sm"> Edit </button>
+												<button class="btn btn-danger btn-sm"> Remove </button>
 											</td>
 										</tr>
 									</tbody>
