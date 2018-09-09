@@ -1,0 +1,15 @@
+{{#each maws}}
+    <div class="card card-body mb-2">
+        <h3>{{title}}</h3>
+        <p>{{details}}</p>
+        <a class="btn btn-dark btn-block" href="/maws/edit/{{id}}">Edit
+        </a>
+        <form method="post" action="/maws/{{id}}?_method=DELETE">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" class="btn btn-danger btn-block" value="Delete">
+        </form>
+    </div>
+
+{{else}}
+    <p> No Maws Listed</p>
+{{/each}}
