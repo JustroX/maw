@@ -123,6 +123,37 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			else
 				page.list = res;
 		});
+
+		page.mode = "add";
+		page.modal = { form: { priv:[] } };
+		page.modal.username_available = true;
+
+		page.togglePriv = (priv)=>
+		{
+			if(page.modal.form.priv.includes(priv))
+				page.modal.form.priv.splice(page.modal.form.priv.indexOf(priv),1);
+			else
+				page.modal.form.priv.push(priv);
+		}
+		page.modal.is_available = ()=>
+		{
+			$http.post("/breeding/user/exists",{token:token, username: page.modal.form.username}).then((res)=>{
+				res = res.data;
+				page.modal.username_available = res;
+			});
+		}
+		page.modal.is_same_password = ()=>
+		{
+			return page.modal.form.password == page.modal.form.rpassword;
+		}
+
+
+		page.add = ()=>
+		{
+			page.mode = "add";
+			page.modal.title = "Add new user";
+			$('#user-form').modal('toggle');
+		}
 	} );
 
 

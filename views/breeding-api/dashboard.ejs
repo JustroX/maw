@@ -60,7 +60,7 @@
 										<input placeholder="Search user..." type="text" class="form-control">
 									</div>
 									<div class="col-md-6">
-										<button class="btn btn-sm btn-success">Add New</button>
+										<button class="btn btn-sm btn-success" ng-click='pages.users.add()'>Add New</button>
 									</div>
 								</div>
 								<hr>
@@ -91,5 +91,53 @@
 						</div>
 					</div>
 				</div>
+		</div>
+
+		<div class="modal fade" id="user-form" tabindex="-1" role="dialog" aria-labelledby="user-form-Label" aria-hidden="true">
+		  <form ng-submit='pages.users.modal.submit()' >
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="user-form-Label">{{ pages.users.modal.title }}</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      		{{ pages.users.modal.form }}
+			        	<b>Username</b> <br>
+			        	<div class="row">
+			        		<div class="col-md-8">
+			        			<input ng-model = 'pages.users.modal.form.username' required type="text" placeholder="Username" class="form-control">
+			        		</div>
+			        	</div>
+			        	<b>Password</b> <br>
+			        	<div class="row">
+			        		<div class="col-md-8">
+			        			<input ng-model = 'pages.users.modal.form.password' required type="password" placeholder="Password" class="form-control">
+			        			<input ng-model = 'pages.users.modal.form.rpassword' required type="password" placeholder="Retype password" class="form-control"> 
+			        		</div>
+			        	</div>
+			        	<b>Email</b> <br>
+			        	<div class="row">
+			        		<div class="col-md-8">
+			        			<input ng-model = 'pages.users.modal.form.email' required type="email" placeholder="Email" class="form-control">
+			        		</div>
+			        	</div>
+			        	<hr>
+			        	<b>Priveleges</b> <br>
+			        	<input ng-click='pages.users.togglePriv("admin")' type="checkbox"> Admin <br>
+			        	<input ng-click='pages.users.togglePriv("maw")' type="checkbox"> Maw manipulation <br>
+			        	<hr>
+			        	<small>By clicking 'Save' the user agrees to the site <a href="">Terms</a> and <a href="">Data Policy</a>, including <a href="">Cookie Use</a></small>
+
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        <button type="Submit" class="btn btn-primary">Save</button>
+			      </div>
+			    </div>
+			  </div>
+		  </form>
 		</div>
 </div>

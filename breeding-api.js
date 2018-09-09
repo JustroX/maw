@@ -102,6 +102,15 @@ exports.init = (app)=>
 			})
 		});
 	});
+	app.post('/breeding/user/exists',(req,res)=>{
+		validate("admin",req,res,(id)=>{
+			let username = req.body.username;
+			db.collection('user').find({username:username}).toArray((err,result)=>{
+				if(err) throw err;
+				res.send( result ? true : false);
+			});
+		});
+	});
 
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
