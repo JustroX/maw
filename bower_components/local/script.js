@@ -9,10 +9,13 @@ app.config( ($routeProvider) => {
 		templateUrl: "pages/auth"
 	})
 	.when("/dashboard",{
-		templateUrl: "pages/dashboard.ejs"
+		templateUrl: "pages/dashboard.handlebars"
 	})
 } );
-
+app.config(function($interpolateProvider) {
+  $interpolateProvider.startSymbol('{[{');
+  $interpolateProvider.endSymbol('}]}');
+});
 //cookie functions
 var cookie = 
 {

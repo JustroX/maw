@@ -1,0 +1,1 @@
+{ "_id" : { "$oid" : "5b7e4f1cc65a7f2774676541" }, "username" : "jromero", "password" : "4866148ef27dbc4baa7fd91bdb60790dd7a5e5daf74672145870a4f10662c07e", "email" : "justro_99@yahoo.com", "maws" : [  ], "priv" : [ "admin" ] }

@@ -53,9 +53,11 @@ function validate(priv, req, res, f)
 
 exports.init = (app)=>
 {
+	// app.set('view engine','ejs');
+
 	//gui
 	app.get('/breeding/',(req,res)=>{
-		res.render('breeding-api/index');
+		res.render('breeding-api/index',{layout:false});
 	});
 
 
@@ -68,13 +70,13 @@ exports.init = (app)=>
 	app.get('/breeding/pages/*',(req,res)=>{		
 		var path = req.originalUrl.substr(15,req.originalUrl.length-15);
 		console.log(path);
-		res.render('breeding-api/'+path);
+		res.render('breeding-api/'+path,{layout:false});
 	});
 
 
 	//auth
 	app.post('/breeding/auth',(req,res)=>{
-
+		console.log("benn here");
 		let username = req.body.form.username;
 		let password = req.body.form.password;
 
