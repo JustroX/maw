@@ -109,7 +109,7 @@ exports.init = (app)=>
 			let username = req.body.username;
 			db.collection('user').find({username:username}).toArray((err,result)=>{
 				if(err) throw err;
-				res.send( result ? true : false);
+				res.send( (result[0] ? false : true));
 			});
 		});
 	});

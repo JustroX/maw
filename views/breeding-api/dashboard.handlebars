@@ -104,18 +104,19 @@
 			        </button>
 			      </div>
 			      <div class="modal-body">
-			      		{[{ pages.users.modal.form }]}
 			        	<b>Username</b> <br>
+			      		<div class="alert alert-danger" ng-if='!pages.users.modal.username_available'>Username is not available</div>
 			        	<div class="row">
 			        		<div class="col-md-8">
-			        			<input ng-model = 'pages.users.modal.form.username' required type="text" placeholder="Username" class="form-control">
+			        			<input ng-change='pages.users.modal.is_available()' ng-model = 'pages.users.modal.form.username' required type="text" placeholder="Username" class="form-control">
 			        		</div>
 			        	</div>
 			        	<b>Password</b> <br>
 			        	<div class="row">
 			        		<div class="col-md-8">
 			        			<input ng-model = 'pages.users.modal.form.password' required type="password" placeholder="Password" class="form-control">
-			        			<input ng-model = 'pages.users.modal.form.rpassword' required type="password" placeholder="Retype password" class="form-control"> 
+			        			<input ng-model = 'pages.users.modal.form.rpassword' ng-class='{"is-valid":pages.users.modal.is_same_password() && pages.users.modal.form.password,"is-invalid":!pages.users.modal.is_same_password()}' ng-change='pages.users.modal.is_same_password()' required type="password" placeholder="Confirm password" class="form-control">
+
 			        		</div>
 			        	</div>
 			        	<b>Email</b> <br>

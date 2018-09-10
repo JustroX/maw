@@ -83,7 +83,13 @@ app.controller("authController",($scope,$http,$location) => {
 
 
 app.controller("dashboardController",($scope,$http,$location) => {
-
+	$.notify({
+		// options
+		message: 'Hello World' 
+	},{
+		// settings
+		type: 'danger'
+	});
 	//UTIL FUNCTIONS
 	$scope.logout = ()=>
 	{
@@ -148,6 +154,14 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.modal.is_same_password = ()=>
 		{
 			return page.modal.form.password == page.modal.form.rpassword;
+		}
+		page.modal.submit = ()=>
+		{
+			if(!page.modal.is_same_password() || !page.modal.username_available)
+				return;
+			$http.post("/breeding/user/add",{token:token, form: page.modal.form}).then((res)=>{
+				
+			});
 		}
 
 
