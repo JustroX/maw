@@ -114,6 +114,28 @@ exports.init = (app)=>
 		});
 	});
 
+	app.post('/breeding/user/add',(req,res)=>{
+		validate("admin",req,res,(id)=>{
+			let form = req.body.form;
+			//check if email exists
+			db.collection('user').find({email:form.email}).toArray((err,result)=>{
+				if(err) throw err;
+				console.log(result);
+				if(result[0])
+				{
+					res.send({err:"Email address is already registered."});
+				}
+				else
+				{
+					db.collection('user').insertOne(form,(err,result_1)=>{
+						if(err) throw err;
+						res.send({mes: "New user has been added."});
+					});
+				}
+			});
+		});
+	});
+
 	app.post('/breeding/api/geneset/add',(req,res)=>{});
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
 	app.post('/breeding/api/geneset/delete',(req,res)=>{});

@@ -83,13 +83,17 @@ app.controller("authController",($scope,$http,$location) => {
 
 
 app.controller("dashboardController",($scope,$http,$location) => {
-	$.notify({
-		// options
-		message: 'Hello World' 
-	},{
-		// settings
-		type: 'danger'
-	});
+
+	function notify(mes,type)
+	{
+		$.notify({
+			// options
+			message: mes 
+		},{
+			// settings
+			type: type
+		});
+	}
 	//UTIL FUNCTIONS
 	$scope.logout = ()=>
 	{
@@ -125,18 +129,23 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 
 	$scope.addPage('users', (page) =>{
-		$http.post('/breeding/users',{token:token}).then((res)=>{
-			res = res.data;
-			if(res.err)
-				console.log(res.err);
-			else
-				page.list = res;
-		});
+
+		page.load_users = ()=>
+		{
+			$http.post('/breeding/users',{token:token}).then((res)=>{
+				res = res.data;
+				if(res.err)
+					console.log(res.err);
+				else
+					page.list = res;
+			});
+			
+		}
 
 		page.mode = "add";
 		page.modal = { form: { priv:[] } };
 		page.modal.username_available = true;
-
+		page.load_users();
 		page.togglePriv = (priv)=>
 		{
 			if(page.modal.form.priv.includes(priv))
@@ -158,9 +167,20 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.modal.submit = ()=>
 		{
 			if(!page.modal.is_same_password() || !page.modal.username_available)
+			{
+				notify("There is an error in your input","danger");
 				return;
+			}
 			$http.post("/breeding/user/add",{token:token, form: page.modal.form}).then((res)=>{
-				
+				res = res.data;
+				if(res.err)
+					notify(res.err, "danger");
+				else
+				{
+					notify(res.mes, "success");
+					page.load_users();
+				}
+				$('#user-form').modal('toggle');
 			});
 		}
 
