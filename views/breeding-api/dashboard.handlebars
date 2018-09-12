@@ -82,7 +82,7 @@
 												<td>{[{ i.email }]}</td>
 												<td>{[{ i.priv.join(" , ") }]}</td>
 												<td>
-													<button class="btn btn-default btn-sm"> Edit </button>
+													<button ng-click='pages.users.edit(i)' class="btn btn-default btn-sm"> Edit </button>
 													<button class="btn btn-danger btn-sm"> Remove </button>
 												</td>
 											</tr>
@@ -129,8 +129,8 @@
 			        	</div>
 			        	<hr>
 			        	<b>Priveleges</b> <br>
-			        	<input ng-click='pages.users.togglePriv("admin")' type="checkbox"> Admin <br>
-			        	<input ng-click='pages.users.togglePriv("maw")' type="checkbox"> Maw manipulation <br>
+			        	<input ng-checked='pages.users.modal.form.priv.includes("admin")' ng-click='pages.users.togglePriv("admin")' type="checkbox"> Admin <br>
+			        	<input ng-checked='pages.users.modal.form.priv.includes("maw")' ng-click='pages.users.togglePriv("maw")' type="checkbox"> Maw manipulation <br>
 			        	<hr>
 			        	<small>By clicking 'Save' the user agrees to the site <a href="">Terms</a> and <a href="">Data Policy</a>, including <a href="">Cookie Use</a></small>
 

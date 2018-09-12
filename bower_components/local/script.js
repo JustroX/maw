@@ -166,6 +166,34 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		}
 		page.modal.submit = ()=>
 		{
+			if(page.mode == "add")
+				page.modal.submit_add();
+			else
+				page.modal.submit_edit();
+		}
+
+		page.modal.submit_edit = ()=>
+		{
+			if(!page.modal.is_same_password() && page.modal.form.password !="")
+			{
+				notify("There is an error in your input","danger");
+				return
+			}
+			$http.post('/breeding/user/edit',{token:token,form:page.modal.form}).then((res)=>{
+				res = res.data;
+				if(res.err)
+					notify(res.err,"danger");
+				else
+				{
+					notify(res.mes,"success");
+					page.load_users();
+				}
+				$("#user-form").modal('toggle');
+			})
+		}
+
+		page.modal.submit_add = ()=>
+		{
 			if(!page.modal.is_same_password() || !page.modal.username_available)
 			{
 				notify("There is an error in your input","danger");
@@ -181,7 +209,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 					page.load_users();
 				}
 				$('#user-form').modal('toggle');
-			});
+			});			
 		}
 
 
@@ -190,6 +218,17 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			page.mode = "add";
 			page.modal.title = "Add new user";
 			$('#user-form').modal('toggle');
+		}
+		page.edit = (obj)=>
+		{
+			// alert(JSON.stringify(obj));
+			page.mode = "edit";
+			page.modal.title = "Edit " + obj.username ;
+			page.modal.target = obj;
+
+			page.modal.form = obj;
+
+			$("#user-form").modal('toggle');
 		}
 	} );
 
