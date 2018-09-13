@@ -107,7 +107,7 @@
 			      </div>
 			      <div class="modal-body">
 			        	<b>Username</b> <br>
-			      		<div class="alert alert-danger" ng-if='!pages.users.modal.username_available'>Username is not available</div>
+			      		<div class="alert alert-danger" ng-if='!pages.users.modal.username_available && pages.users.mode=="add" '>Username is not available</div>
 			        	<div class="row">
 			        		<div class="col-md-8">
 			        			<input ng-change='pages.users.modal.is_available()' ng-model = 'pages.users.modal.form.username' required type="text" placeholder="Username" class="form-control">
@@ -116,8 +116,8 @@
 			        	<b>Password</b> <br>
 			        	<div class="row">
 			        		<div class="col-md-8">
-			        			<input ng-model = 'pages.users.modal.form.password' required type="password" placeholder="Password" class="form-control">
-			        			<input ng-model = 'pages.users.modal.form.rpassword' ng-class='{"is-valid":pages.users.modal.is_same_password() && pages.users.modal.form.password,"is-invalid":!pages.users.modal.is_same_password()}' ng-change='pages.users.modal.is_same_password()' required type="password" placeholder="Confirm password" class="form-control">
+			        			<input ng-model = 'pages.users.modal.form.password' ng-required='pages.users.mode=="add" ' type="password" placeholder="Password" class="form-control">
+			        			<input ng-model = 'pages.users.modal.form.rpassword' ng-class='{"is-valid":pages.users.modal.is_same_password() && pages.users.modal.form.password,"is-invalid":!pages.users.modal.is_same_password()}' ng-change='pages.users.modal.is_same_password()' ng-required='pages.users.mode=="add" ' type="password" placeholder="Confirm password" class="form-control">
 
 			        		</div>
 			        	</div>

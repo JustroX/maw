@@ -221,7 +221,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		}
 		page.edit = (obj)=>
 		{
-			// alert(JSON.stringify(obj));
+			alert(JSON.stringify(obj));
 			page.mode = "edit";
 			page.modal.title = "Edit " + obj.username ;
 			page.modal.target = obj;

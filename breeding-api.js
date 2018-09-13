@@ -14,6 +14,7 @@ var jwt = require('./jwt-ee.js');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://localhost:27017/';
 var db;
+var ObjectId = require('mongodb').ObjectID;
 
 var SHA256 = require('crypto-js/SHA256');
 
@@ -133,6 +134,21 @@ exports.init = (app)=>
 					});
 				}
 			});
+		});
+	});
+
+	app.post('/breeding/user/edit',(req,res)=>{
+		validate("admin",req,res,(id)=>{
+			let form = req.body.form;
+			let _id = form._id;
+			delete form._id;
+			console.log(JSON.stringify(form));
+			db.collection('user').updateOne({_id: ObjectId(_id) },{ $set: form},
+				(err,result)=>
+				{
+					if(err) throw err;
+					res.send({mes:"User message has been updated."});
+				});
 		});
 	});
 
