@@ -77,7 +77,7 @@ exports.init = (app)=>
 
 	//auth
 	app.post('/breeding/auth',(req,res)=>{
-		console.log("benn here");
+		// console.log("been here");
 		let username = req.body.form.username;
 		let password = req.body.form.password;
 
@@ -85,7 +85,7 @@ exports.init = (app)=>
 
 		db.collection('user').findOne({username:username,password:password},(err,result)=>{
 			if(err) throw err;
-
+			console.log(password);
 			if(result)
 			{
 				//generate token
@@ -119,6 +119,7 @@ exports.init = (app)=>
 		validate("admin",req,res,(id)=>{
 			let form = req.body.form;
 			//check if email exists
+			form.password  = SHA256(form.password + settings.secret).toString();
 			db.collection('user').find({email:form.email}).toArray((err,result)=>{
 				if(err) throw err;
 				console.log(result);
@@ -141,6 +142,7 @@ exports.init = (app)=>
 		validate("admin",req,res,(id)=>{
 			let form = req.body.form;
 			let _id = form._id;
+			if(form.password) form.password  = SHA256(form.password + settings.secret).toString();
 			delete form._id;
 			console.log(JSON.stringify(form));
 			db.collection('user').updateOne({_id: ObjectId(_id) },{ $set: form},
