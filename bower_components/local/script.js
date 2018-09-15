@@ -212,6 +212,21 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			});			
 		}
 
+		page.modal.submit_delete = ()=>
+		{
+			$http.post("/breeding/user/delete",{token:token , _id : page.modal.target._id}).then((res)=>{
+				res = res.data;
+				if(res.err)
+					notify(res.err,"danger");
+				else
+				{
+					notify(res.mes, "success");
+					page.load_users();
+				}
+				$('#user-delete').modal('toggle');
+			});
+		}
+
 
 		page.add = ()=>
 		{
@@ -221,7 +236,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		}
 		page.edit = (obj)=>
 		{
-			alert(JSON.stringify(obj));
+			// alert(JSON.stringify(obj));
 			page.mode = "edit";
 			page.modal.title = "Edit " + obj.username ;
 			page.modal.target = obj;
@@ -229,6 +244,13 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			page.modal.form = obj;
 
 			$("#user-form").modal('toggle');
+		}
+		page.delete = (obj) =>
+		{
+			page.mode = "delete";
+			page.modal.title = obj.username; 
+			page.modal.target = obj ;
+			$("#user-delete").modal('toggle');
 		}
 	} );
 

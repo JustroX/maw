@@ -144,13 +144,28 @@ exports.init = (app)=>
 			let _id = form._id;
 			if(form.password) form.password  = SHA256(form.password + settings.secret).toString();
 			delete form._id;
-			console.log(JSON.stringify(form));
+			// console.log(JSON.stringify(form));
 			db.collection('user').updateOne({_id: ObjectId(_id) },{ $set: form},
 				(err,result)=>
 				{
 					if(err) throw err;
-					res.send({mes:"User message has been updated."});
+					res.send({mes:"User info has been updated."});
 				});
+		});
+	});
+
+	app.post('/breeding/user/delete',(req,res)=>{
+		validate("admin",req,res,(id)=>{
+			let obj = req.body._id;
+			if( id == obj )
+			{
+				res.send({err: "You can not delete yourself."});
+				return;
+			}
+			db.collection('user').deleteOne({_id: ObjectId(obj)} , (err,result)=>{
+				if(err) throw err;
+				res.send({mes: "User has been deleted."});
+			})
 		});
 	});
 

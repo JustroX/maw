@@ -83,7 +83,7 @@
 												<td>{[{ i.priv.join(" , ") }]}</td>
 												<td>
 													<button ng-click='pages.users.edit(i)' class="btn btn-default btn-sm"> Edit </button>
-													<button class="btn btn-danger btn-sm"> Remove </button>
+													<button class="btn btn-danger btn-sm" ng-click='pages.users.delete(i)'> Remove </button>
 												</td>
 											</tr>
 										</tbody>
@@ -142,5 +142,24 @@
 			    </div>
 			  </div>
 		  </form>
+		</div>
+
+
+
+
+		<div class="modal fade" id="user-delete" tabindex="-1" role="dialog" aria-labelledby="user-delete-Label" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-body">
+			      	Are you sure you want to delete {[{ pages.users.modal.title }]} ?
+			      	<br>
+			      	<small style="color: red">Note: This process is irreversible.</small>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			        <button class="btn btn-danger" ng-click='pages.users.modal.submit_delete()'>Confirm</button>
+			      </div>
+			    </div>
+			  </div>
 		</div>
 </div>
