@@ -16,6 +16,13 @@ app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
   $interpolateProvider.endSymbol('}]}');
 });
+
+
+app.filter('capitalize', function() {
+    return function(input) {
+      return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    }
+});
 //cookie functions
 var cookie = 
 {
@@ -123,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = ["users"];
+	$scope.location = ["geneset"];
 	$scope.pages = {};
 	$scope.user = {};
 
@@ -253,10 +260,13 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			$("#user-delete").modal('toggle');
 		}
 	} );
+	$scope.addPage('geneset', (page)=>{
+
+	});
 
 
 	//default page
-	setTimeout(()=>{$scope.goto('users');},1000);
+	setTimeout(()=>{$scope.goto('geneset');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 

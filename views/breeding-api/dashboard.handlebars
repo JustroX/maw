@@ -19,7 +19,7 @@
 							<div class="card-body">	
 								<b>	Maw </b> <br>	
 								<ul>
-									<li>Geneset</li>
+									<li> <a href="javascript:void(0)" ng-click='goto("geneset")'>Geneset</a> </li>
 									<li>Alelle</li>
 									<li>Features</li>
 									<li>Assets</li>
@@ -43,11 +43,13 @@
 					<div class="card">	
 							<div class="card-body">	
 									<div class="container">	
-											<b>HOME</b> > Geneset > Genes > Feature 1
+											<b><a href="javascript:void(0)" ng-click='goto("home")'>HOME</a></b> 
+											<span ng-repeat='i in location' > > {[{ i | capitalize }]}  </span>
 									</div>
 							</div>
 					</div>
 
+					<!-- Users -->
 					<div ng-if='is_here("users")'>
 						<br>
 						<div class="card">
@@ -92,6 +94,134 @@
 							</div>
 						</div>
 					</div>
+
+					<!-- Geneset -->
+					<div ng-if='is_here("geneset")'>
+						<br>
+						<div class="card">
+							<div class="card-body">
+								<div class="container">
+									<br>
+									<h4>Geneset</h4>
+									<p> collection of unique representation of features and allele </p>
+									<ol>
+										<li> <a href="javascript:void(0)"> Maw v.1.0.1 </a></li>
+										<li> <a href="javascript:void(0)"> Maw v.1.0.2 </a></li>
+										<li> <a href="javascript:void(0)"> Maw v.1.0.3 </a></li>
+										<li> <a href="javascript:void(0)"> Maw v.1.0.4 </a></li>
+									</ol>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="card"> 
+							<div class="card-body">
+								<div class="container">
+									<br>
+									<h4>Geneset Settings</h4>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+									<div class="row">
+										<div class="col-md-3">
+											<div style="overflow-y: scroll; height: 50vh">
+												<table class="table table-border table-striped">
+													<thead>
+														<tr>
+															<th>Alleles</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr><td>Eyes</td></tr>
+														<tr><td>Mouth</td></tr>
+														<tr><td>Body</td></tr>
+														<tr><td>Pattern</td></tr>
+													</tbody>
+													<thead>
+														<tr><th>Modifiers</th></tr>
+													</thead>
+													<tbody>
+														<tr><td>Eyes</td></tr>
+														<tr><td>Mouth</td></tr>
+														<tr><td>Body</td></tr>
+														<tr><td>Pattern</td></tr>
+													</tbody>
+												</table>
+											</div>
+										</div>	
+										<div class="col-md-9">
+											<div style="overflow-y: scroll;height: 50vh;">
+												<table class="table table-border table-striped">
+													
+													<thead>
+														<tr>
+															<th>Feature</th>
+															<th>Value</th>
+															<th>Dominance</th>
+															<th>Asset</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Big Eyes</td>
+															<td>0</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Small Eyes</td>
+															<td>1</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Weird Eyes</td>
+															<td>3</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Big Eyes</td>
+															<td>0</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Big Eyes</td>
+															<td>4</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Big Eyes</td>
+															<td>5</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+														<tr>
+															<td>Big Eyes</td>
+															<td>6</td>
+															<td>1.20</td>
+															<td><a href="javascript:void(0)"> #ae32b </a></td>
+														</tr>
+
+													</tbody>
+													<thead>
+												</table>
+											</div>
+										</div>									
+									</div>
+									<br><br>
+								</div>
+							</div>
+						</div>
+						<br><br>
+						<br><br>
+						<br><br>
+						<br><br>
+						<br><br>
+						<br><br>
+						<br><br>
+					</div>
+
 				</div>
 		</div>
 
