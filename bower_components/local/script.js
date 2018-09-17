@@ -261,7 +261,15 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		}
 	} );
 	$scope.addPage('geneset', (page)=>{
-
+		page.geneset.name = '';
+		page.geneset.submit = ()=>
+		{
+			$http.post('/breeding/api/geneset/add',{token:token,name: page.geneset.name}).then((res)=>{
+				res = res.data;
+				if(res.err)
+					return notify(res.err, "danger");
+			});
+		}
 	});
 
 

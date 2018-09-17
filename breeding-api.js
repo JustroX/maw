@@ -169,7 +169,22 @@ exports.init = (app)=>
 		});
 	});
 
-	app.post('/breeding/api/geneset/add',(req,res)=>{});
+	app.post('/breeding/api/geneset',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('geneset').find({}).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result);
+			});
+		});
+	});
+	app.post('/breeding/api/geneset/add',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('geneset').insertOne({}, (err,result)=>{
+				if(err) throw err;
+				res.send({mes: "Geneset added."});
+			});
+		});
+	});
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
 	app.post('/breeding/api/geneset/delete',(req,res)=>{});
 
