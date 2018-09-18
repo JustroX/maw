@@ -261,15 +261,32 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		}
 	} );
 	$scope.addPage('geneset', (page)=>{
-		page.geneset.name = '';
-		page.geneset.submit = ()=>
+		page.name = '';
+		page.list = [];
+		page.submit = ()=>
 		{
-			$http.post('/breeding/api/geneset/add',{token:token,name: page.geneset.name}).then((res)=>{
+			notify("sending","success");
+			$http.post('/breeding/api/geneset/add',{token:token,name: page.name}).then((res)=>{
 				res = res.data;
+				console.log(res);
+				notify(res.mes,"success");
 				if(res.err)
 					return notify(res.err, "danger");
+				page.name = "";
+				page.fetch();
 			});
 		}
+		page.fetch = ()=>
+		{
+			$http.post('/breeding/api/geneset',{token:token}).then((res)=>{
+				res = res.data;
+				console.log(res);
+				if(res.err)
+					return notify(res.err, "danger");
+				page.list =res;
+			});
+		}
+		page.fetch();
 	});
 
 

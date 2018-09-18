@@ -105,16 +105,13 @@
 									<h4>Geneset</h4>
 									<p> 
 										collection of unique representation of features and allele
-										<form class="form-inline" ng-click='pages.geneset.add()'>
+										<form class="form-inline" ng-submit='pages.geneset.add()'>
 											<input class="form-control form-control-sm" type="text" ng-model='pages.geneset.name' >  
 											<button type="submit" class="btn btn-primary btn-sm">Add</button>
 										</form>
 									</p>
 									<ol>
-										<li> <a href="javascript:void(0)"> Maw v.1.0.1</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
-										<li> <a href="javascript:void(0)"> Maw v.1.0.2</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
-										<li> <a href="javascript:void(0)"> Maw v.1.0.3</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
-										<li> <a href="javascript:void(0)"> Maw v.1.0.4</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
+										<li ng-repeat='i in pages.geneset.list' > <a href="javascript:void(0)"> Maw v.1.0.1</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
 									</ol>
 								</div>
 							</div>

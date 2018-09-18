@@ -171,15 +171,23 @@ exports.init = (app)=>
 
 	app.post('/breeding/api/geneset',(req,res)=>{
 		validate("maw",req,res,(id)=>{
+
 			db.collection('geneset').find({}).toArray((err,result)=>{
 				if(err) throw err;
+				console.log(result);
 				res.send(result);
 			});
 		});
 	});
 	app.post('/breeding/api/geneset/add',(req,res)=>{
 		validate("maw",req,res,(id)=>{
-			db.collection('geneset').insertOne({}, (err,result)=>{
+			let d = req.body.name;
+			db.collection('geneset').insertOne(
+				{   
+					label : d,
+					alelles : [],
+				}
+				, (err,result)=>{
 				if(err) throw err;
 				res.send({mes: "Geneset added."});
 			});
