@@ -265,10 +265,8 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.list = [];
 		page.submit = ()=>
 		{
-			notify("sending","success");
 			$http.post('/breeding/api/geneset/add',{token:token,name: page.name}).then((res)=>{
 				res = res.data;
-				console.log(res);
 				notify(res.mes,"success");
 				if(res.err)
 					return notify(res.err, "danger");
@@ -286,6 +284,11 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				page.list =res;
 			});
 		}
+		page.view = (i)=>
+		{
+			
+		}
+
 		page.fetch();
 	});
 

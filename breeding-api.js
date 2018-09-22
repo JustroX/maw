@@ -182,6 +182,7 @@ exports.init = (app)=>
 	app.post('/breeding/api/geneset/add',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let d = req.body.name;
+			console.log(d);
 			db.collection('geneset').insertOne(
 				{   
 					label : d,

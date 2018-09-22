@@ -105,13 +105,13 @@
 									<h4>Geneset</h4>
 									<p> 
 										collection of unique representation of features and allele
-										<form class="form-inline" ng-submit='pages.geneset.add()'>
+										<form class="form-inline" ng-submit='pages.geneset.submit()'>
 											<input class="form-control form-control-sm" type="text" ng-model='pages.geneset.name' >  
 											<button type="submit" class="btn btn-primary btn-sm">Add</button>
 										</form>
 									</p>
 									<ol>
-										<li ng-repeat='i in pages.geneset.list' > <a href="javascript:void(0)"> Maw v.1.0.1</a> &nbsp&nbsp <a href="javascript:void(0)" style="color: green">Edit</a> &nbsp&nbsp <a style="color: red" href="javascript:void(0)">Delete</a>  </li>
+										<li ng-repeat='i in pages.geneset.list' > <a href="javascript:void(0)" ng-click='pages.geneset.view(i)'> {[{ i.label }]}</a> &nbsp&nbsp  &nbsp&nbsp <a ng-click='pages.geneset.delete()' style="color: red" href="javascript:void(0)">Delete</a>  </li>
 									</ol>
 								</div>
 							</div>
@@ -126,26 +126,20 @@
 									<div class="row">
 										<div class="col-md-3">
 											<div style="overflow-y: scroll; height: 50vh">
-												<table class="table table-border table-striped">
+												<table class="table table-border table-striped table-hover">
 													<thead>
 														<tr>
 															<th>Alleles</th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr><td>Eyes</td></tr>
-														<tr><td>Mouth</td></tr>
-														<tr><td>Body</td></tr>
-														<tr><td>Pattern</td></tr>
+														<tr style="cursor: pointer;" ng-repeat='i in [1,2,3,4,5]'><td>Eyes</td></tr>
 													</tbody>
 													<thead>
 														<tr><th>Modifiers</th></tr>
 													</thead>
 													<tbody>
-														<tr><td>Eyes</td></tr>
-														<tr><td>Mouth</td></tr>
-														<tr><td>Body</td></tr>
-														<tr><td>Pattern</td></tr>
+														<tr style="cursor: pointer;" ng-repeat='i in [1,2,3,4,5]'><td>Eyes</td></tr>
 													</tbody>
 												</table>
 											</div>
@@ -163,47 +157,20 @@
 														</tr>
 													</thead>
 													<tbody>
-														<tr>
+														<tr ng-repeat=' i in [1,2,3,4,5]'>
 															<td>Big Eyes</td>
 															<td>0</td>
 															<td>1.20</td>
 															<td><a href="javascript:void(0)"> #ae32b </a></td>
 														</tr>
 														<tr>
-															<td>Small Eyes</td>
-															<td>1</td>
-															<td>1.20</td>
+															<td> <input type="text" class="form-control" > </td>
+															<td> <input type="text" class="form-control" > </td>
+															<td> <input type="number" class="form-control" > </td>
 															<td><a href="javascript:void(0)"> #ae32b </a></td>
 														</tr>
 														<tr>
-															<td>Weird Eyes</td>
-															<td>3</td>
-															<td>1.20</td>
-															<td><a href="javascript:void(0)"> #ae32b </a></td>
-														</tr>
-														<tr>
-															<td>Big Eyes</td>
-															<td>0</td>
-															<td>1.20</td>
-															<td><a href="javascript:void(0)"> #ae32b </a></td>
-														</tr>
-														<tr>
-															<td>Big Eyes</td>
-															<td>4</td>
-															<td>1.20</td>
-															<td><a href="javascript:void(0)"> #ae32b </a></td>
-														</tr>
-														<tr>
-															<td>Big Eyes</td>
-															<td>5</td>
-															<td>1.20</td>
-															<td><a href="javascript:void(0)"> #ae32b </a></td>
-														</tr>
-														<tr>
-															<td>Big Eyes</td>
-															<td>6</td>
-															<td>1.20</td>
-															<td><a href="javascript:void(0)"> #ae32b </a></td>
+															<td colspan="4" class="text-center" style="cursor: pointer;"> <b>Add + </b>  </td>
 														</tr>
 
 													</tbody>
@@ -212,6 +179,16 @@
 											</div>
 										</div>									
 									</div>
+									<br>
+									<form class="form-inline">
+										<input class="form-control form-sm" > &nbsp&nbsp
+										<select class="form-control">
+											<option value="allele"> Allele</option>
+											<option value="modifier"> Modifier</option>
+										</select> &nbsp&nbsp
+										<button class="btn btn-primary">Add</button>
+									</form>
+									<br>
 									<br><br>
 								</div>
 							</div>
