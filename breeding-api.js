@@ -172,6 +172,12 @@ exports.init = (app)=>
 	app.post('/breeding/api/geneset',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 
+			if(req.body.geneset)
+			db.collection('geneset').find({ _id : ObjectId(req.body.geneset) }).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result[0]);
+			});
+			else
 			db.collection('geneset').find({}).toArray((err,result)=>{
 				if(err) throw err;
 				console.log(result);
@@ -182,7 +188,6 @@ exports.init = (app)=>
 	app.post('/breeding/api/geneset/add',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let d = req.body.name;
-			console.log(d);
 			db.collection('geneset').insertOne(
 				{   
 					label : d,
@@ -194,10 +199,40 @@ exports.init = (app)=>
 			});
 		});
 	});
+
+
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
 	app.post('/breeding/api/geneset/delete',(req,res)=>{});
 
-	app.post('/breeding/api/alelle/add',(req,res)=>{});
+	app.post('/breeding/api/alelle',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+
+		});
+	});
+
+	app.post('/breeding/api/alelle/add',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let label = req.body.label;
+			let mode = req.body.mode;
+			let geneset = req.body.geneset;
+			db.collection('alelle').insertOne(
+			{
+				label : label,
+				values : [],
+				type : mode,
+				geneset: geneset
+			},
+			(err,result)=>
+			{
+				if(err) throw err;
+				db.collection('geneset').updateOne({_id:ObjectID(geneset)},{$push: { alleles: result._id }  },
+				(err,result1)=>{
+					if(err) throw err;
+					res.send({mes: "Allele added."});
+				});
+			});		
+		});
+	});
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
 	app.post('/breeding/api/alelle/delete',(req,res)=>{});
 	
