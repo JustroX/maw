@@ -206,6 +206,21 @@ exports.init = (app)=>
 
 	app.post('/breeding/api/alelle',(req,res)=>{
 		validate("maw",req,res,(id)=>{
+			
+			let geneset  = req.body.geneset._id;
+			db.collection('geneset').aggregate([
+				{ $match: {_id: ObjectId(geneset)} },
+				{ $lookup:
+				{
+					from: 'geneset',
+					localField: 'alelle',
+					foreignField: '_id',
+					as: 'allele'
+				} }
+			]).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result[0]);
+			})
 
 		});
 	});
