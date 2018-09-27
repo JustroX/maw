@@ -27,7 +27,7 @@ var settings =
 MongoClient.connect(url , (err,dbo) =>{
 	if(err) throw err;
 	db = dbo.db('local');
-	console.log("Succesfully connected to Breeding API database. ");	
+	// console.log("Succesfully connected to Breeding API database. ");	
 });
 
 function validate(priv, req, res, f)
@@ -70,7 +70,7 @@ exports.init = (app)=>
 
 	app.get('/breeding/pages/*',(req,res)=>{		
 		var path = req.originalUrl.substr(15,req.originalUrl.length-15);
-		console.log(path);
+		// console.log(path);
 		res.render('breeding-api/'+path,{layout:false});
 	});
 
@@ -122,7 +122,7 @@ exports.init = (app)=>
 			form.password  = SHA256(form.password + settings.secret).toString();
 			db.collection('user').find({email:form.email}).toArray((err,result)=>{
 				if(err) throw err;
-				console.log(result);
+				// console.log(result);
 				if(result[0])
 				{
 					res.send({err:"Email address is already registered."});
@@ -180,7 +180,6 @@ exports.init = (app)=>
 			else
 			db.collection('geneset').find({}).toArray((err,result)=>{
 				if(err) throw err;
-				console.log(result);
 				res.send(result);
 			});
 		});
@@ -204,7 +203,7 @@ exports.init = (app)=>
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
 	app.post('/breeding/api/geneset/delete',(req,res)=>{});
 
-	app.post('/breeding/api/alelle',(req,res)=>{
+	app.post('/breeding/api/allele',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			
 			let geneset  = req.body.geneset._id;
@@ -212,20 +211,20 @@ exports.init = (app)=>
 				{ $match: {_id: ObjectId(geneset)} },
 				{ $lookup:
 				{
-					from: 'geneset',
-					localField: 'alelle',
+					from: 'alelle',
+					localField: 'alleles',
 					foreignField: '_id',
-					as: 'allele'
+					as: 'alleles'
 				} }
 			]).toArray((err,result)=>{
 				if(err) throw err;
-				res.send(result[0]);
+					res.send(result[0]);
 			})
 
 		});
 	});
 
-	app.post('/breeding/api/alelle/add',(req,res)=>{
+	app.post('/breeding/api/allele/add',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let label = req.body.label;
 			let mode = req.body.mode;
@@ -240,7 +239,9 @@ exports.init = (app)=>
 			(err,result)=>
 			{
 				if(err) throw err;
-				db.collection('geneset').updateOne({_id:ObjectID(geneset)},{$push: { alleles: result._id }  },
+				result = result.ops[0];
+				console.log(geneset);
+				db.collection('geneset').updateOne({_id: ObjectId(geneset._id)},{$push: { alleles: ObjectId(result._id) }  },
 				(err,result1)=>{
 					if(err) throw err;
 					res.send({mes: "Allele added."});

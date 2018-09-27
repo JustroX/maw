@@ -263,7 +263,6 @@ app.controller("dashboardController",($scope,$http,$location) => {
 	$scope.addPage('geneset', (page)=>{
 		page.name = '';
 		page.list = [];
-		page.geneset = {};
 
 		page.submit = ()=>
 		{
@@ -304,15 +303,24 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 		page.allele.load = ()=>
 		{
-			$http.post("/breeding/api/alelle",{token:token, geneset: page.geneset}).then((res)=>{
+			$http.post("/breeding/api/allele",{token:token, geneset: page.geneset}).then((res)=>{
 				res = res.data;
-				page.alelele.content = res;
+				console.log(res);	
+				page.allele.content = res.alleles;
 			});
 		}
 		page.allele.add.submit = ()=>
 		{
-			$http.post("/breeding/api/",{token:token, geneset: geneset, mode: page.allele.add.mode , label : page.allele.add.label }).then((res)=>{
+			$http.post("/breeding/api/allele/add",{token:token, geneset: page.geneset, mode: page.allele.add.mode , label : page.allele.add.label }).then((res)=>{
 				res =res.data;
+				page.allele.add.label ="";
+				if(res.err)
+					notify(res.err,"danger");
+				else
+				{
+					notify(res.mes,"success");
+					page.view(page.geneset);
+				}
 			});
 		}
 

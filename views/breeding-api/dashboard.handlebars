@@ -117,12 +117,12 @@
 							</div>
 						</div>
 						<br>
-						<div class="card"> 
+						<div class="card" ng-if='pages.geneset.geneset'> 
 							<div class="card-body">
 								<div class="container">
 									<br>
 									<h4>Geneset Settings</h4>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+									<p>Geneset settings for {[{ pages.geneset.geneset.label }]}.</p>
 									<div class="row">
 										<div class="col-md-3">
 											<div style="overflow-y: scroll; height: 50vh">
@@ -133,7 +133,7 @@
 														</tr>
 													</thead>
 													<tbody>
-														<tr style="cursor: pointer;" ng-repeat='i in pages.geneset.alelle.content'><td>Eyes</td></tr>
+														<tr style="cursor: pointer;" ng-repeat='i in pages.geneset.allele.content'><td>{[{i.label}]}</td></tr>
 													</tbody>
 													<thead>
 														<tr><th>Modifiers</th></tr>
@@ -180,7 +180,7 @@
 										</div>									
 									</div>
 									<br>
-									<form class="form-inline" ng-submit=''>
+									<form class="form-inline" ng-submit='pages.geneset.allele.add.submit()'>
 										<input class="form-control form-sm"  ng-model='pages.geneset.allele.add.label' > &nbsp&nbsp
 										<select class="form-control" ng-model='pages.geneset.allele.add.mode'>
 											<option selected value="allele"> Allele</option>
