@@ -299,13 +299,26 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			edit : {},
 			delete: {},
 
-			content : []
+			content : [],
+			features: [
+				{label: "a" , feature:"try", dominance: 2}
+			],
 		};
+		page.allele.view = (i)=>
+		{
+			$http.post("/breeding/api/allele/view",{token:token,id: i._id}).then((res)=>
+			{
+				res = res.data;
+				console.log(res);
+				if(res.err) return console.log(res.err);
+				page.allele.features = res.values;
+			});
+		}
 		page.allele.load = ()=>
 		{
 			$http.post("/breeding/api/allele",{token:token, geneset: page.geneset}).then((res)=>{
 				res = res.data;
-				console.log(res);	
+				if(res.err) return console.log(res.err);
 				page.allele.content = res.alleles;
 			});
 		}

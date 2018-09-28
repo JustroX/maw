@@ -249,6 +249,17 @@ exports.init = (app)=>
 			});		
 		});
 	});
+	app.post('/breeding/api/allele/view',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let allele = req.body.id;
+			db.collection('alelle').find({id: ObjectId(allele)},{}).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result);
+			});
+		});
+	});
+
+
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
 	app.post('/breeding/api/alelle/delete',(req,res)=>{});
 	
