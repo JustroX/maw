@@ -304,14 +304,24 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				{label: "a" , feature:"try", dominance: 2}
 			],
 		};
+
+		page.feature = {
+			add : {
+				feature : "",
+				label : "",
+				dominance: 0,
+			},
+
+		}
+
 		page.allele.view = (i)=>
 		{
+			page.allele.target = i;
 			$http.post("/breeding/api/allele/view",{token:token,id: i._id}).then((res)=>
 			{
 				res = res.data;
-				console.log(res);
 				if(res.err) return console.log(res.err);
-				page.allele.features = res.values;
+				page.allele.features = res[0].values;
 			});
 		}
 		page.allele.load = ()=>
@@ -334,6 +344,17 @@ app.controller("dashboardController",($scope,$http,$location) => {
 					notify(res.mes,"success");
 					page.view(page.geneset);
 				}
+			});
+		}
+
+		page.feature.add.submit = ()=>
+		{
+			$http.post('/breeding/api/value/add',{token:token, feature:  page.feature.add, target: page.allele.target }).then((res)=>{
+				res = res.data;
+				if(res.err) return notify(res.err,"danger");
+				page.feature.add.feature = "";
+				page.feature.add.label = "";
+				page.feature.add.dominance = "";
 			});
 		}
 

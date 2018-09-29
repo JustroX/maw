@@ -164,13 +164,13 @@
 															<td><a href="javascript:void(0)"> #ae32b </a></td>
 														</tr>
 														<tr>
-															<td> <input type="text" class="form-control" > </td>
-															<td> <input type="text" class="form-control" > </td>
-															<td> <input type="number" class="form-control" > </td>
+															<td> <input ng-model='pages.geneset.feature.add.feature' type="text" class="form-control" > </td>
+															<td> <input ng-model='pages.geneset.feature.add.label' type="text" class="form-control" > </td>
+															<td> <input ng-model='pages.geneset.feature.add.dominance' type="number" class="form-control" > </td>
 															<td><a href="javascript:void(0)"> #ae32b </a></td>
 														</tr>
 														<tr>
-															<td colspan="4" class="text-center" style="cursor: pointer;"> <b>Add + </b>  </td>
+															<td colspan="4" class="text-center" ng-click='pages.geneset.feature.add.submit()' style="cursor: pointer;"> <b>Add + </b>  </td>
 														</tr>
 
 													</tbody>

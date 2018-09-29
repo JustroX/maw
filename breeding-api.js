@@ -252,20 +252,42 @@ exports.init = (app)=>
 	app.post('/breeding/api/allele/view',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let allele = req.body.id;
-			db.collection('alelle').find({id: ObjectId(allele)},{}).toArray((err,result)=>{
+			console.log(allele);
+			db.collection('alelle').find({_id: ObjectId(allele)},{}).toArray((err,result)=>{
 				if(err) throw err;
+				console.log(result);
 				res.send(result);
 			});
 		});
 	});
 
+	app.post('/breeding/api/value/add',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let form = req.body.feature;
+			db.collection('value').insertOne(
+			{
+				label : form.label,
+				feature : form.feature,
+				dominance: form.dominance
+			},
+			(err,result)=>{
+				if(err) throw err;
+				db.collection('alelle').updateOne({ _id : ObjectId(req.body.target._id) },{ $push : { values : ObjectId(result.ops[0]._id) } },
+					(err,result1)=>{
+						if(err) throw err;
+					res.send({mes:"Value Added"});
+				});
+			});
+		});
+	});	
+
+
+	app.post('/breeding/api/value/edit',(req,res)=>{});
+	app.post('/breeding/api/value/delete',(req,res)=>{});
 
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
 	app.post('/breeding/api/alelle/delete',(req,res)=>{});
 	
-	app.post('/breeding/api/value/add',(req,res)=>{});
-	app.post('/breeding/api/value/edit',(req,res)=>{});
-	app.post('/breeding/api/value/delete',(req,res)=>{});
 	
 	app.post('/breeding/api/asset/add',(req,res)=>{});
 	app.post('/breeding/api/asset/edit',(req,res)=>{});
