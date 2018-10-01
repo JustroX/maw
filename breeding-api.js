@@ -253,7 +253,19 @@ exports.init = (app)=>
 		validate("maw",req,res,(id)=>{
 			let allele = req.body.id;
 			console.log(allele);
-			db.collection('alelle').find({_id: ObjectId(allele)},{}).toArray((err,result)=>{
+
+			db.collection('alelle').aggregate([
+				{ $match: { _id : ObjectId(allele) } },
+				{
+					$lookup:
+					{
+						from: 'value',
+						localField: 'values',
+						foreignField: '_id',
+						as: 'values'
+					} 
+				}
+			]).toArray((err,result)=>{
 				if(err) throw err;
 				console.log(result);
 				res.send(result);

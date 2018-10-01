@@ -300,9 +300,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			delete: {},
 
 			content : [],
-			features: [
-				{label: "a" , feature:"try", dominance: 2}
-			],
+			features: [	],
 		};
 
 		page.feature = {
@@ -355,6 +353,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				page.feature.add.feature = "";
 				page.feature.add.label = "";
 				page.feature.add.dominance = "";
+				page.allele.view( page.allele.target );
 			});
 		}
 
