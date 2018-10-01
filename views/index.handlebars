@@ -1,6 +1,28 @@
-<div class="jumbotron text-center">
-    <img src="/img/FirstMaw.png" class="img-fluid mb-5 d-block mx-auto" alt="error">
-    <h1 class="display-3">{{title}}</h1>
-    <p class="lead"> Create Your first Maw Here!</p>
-    <a href="/maws/add" class="btn btn-dark btn-lg">Make maw</a>
-</div>
+<body data-spy="scroll" data-target=".navbar" data-offset="0">
+    <header id="Home" class="jumbotron">
+        <div class="row h-100">
+            <div class="col-lg-7 my-auto">
+                <div class="header-content mx-auto">
+                    <h1 class="mb-5">
+                        Maw is a game, a nice game. Go breed!
+                    </h1>
+                    <p class="lead"> Create Your first Maw Here!</p>
+                    <a href="/maws/add" class="btn btn-dark btn-lg">Make maw</a>
+                </div>
+            </div>
+            <div class="col-lg-5 my-auto">
+                <img src="/img/FirstMaw.png" class="img-fluid mb-5 d-block mx-auto" alt="error">
+                <h1 class="display-3">{{title}}</h1>
+            </div>
+        </div>
+    </header>
+    <section id="About" class="container">
+        {{> _about}}
+    </section>
+    <section class="cta">
+        {{> _cta}}
+    </section>
+    <section id="Contact" class="contact bg-primary">
+        {{> _contact}}
+    </section>
+</body>
