@@ -146,7 +146,7 @@
 										</div>	
 										<div class="col-md-9">
 											<div style="overflow-y: scroll;height: 50vh;">
-												<table class="table table-border table-striped">
+												<table class="table table-border table-striped table-hover">
 													
 													<thead>
 														<tr>
@@ -157,7 +157,7 @@
 														</tr>
 													</thead>
 													<tbody>
-														<tr ng-repeat=' i in pages.geneset.allele.features'>
+														<tr ng-click='pages.geneset.allele.view_feature(i)' ng-repeat=' i in pages.geneset.allele.features'>
 															<td>{[{ i.feature }]}</td>
 															<td>{[{ i.label }]}</td>
 															<td>{[{i.dominance}]}</td>
@@ -268,6 +268,28 @@
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 			        <button class="btn btn-danger" ng-click='pages.users.modal.submit_delete()'>Confirm</button>
+			      </div>
+			    </div>
+			  </div>
+		</div>
+
+		<div class="modal fade" id="feature-view" tabindex="-1" role="dialog" aria-labelledby="feature-view-Label" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-body">
+			      	<h4>Feature Information</h4>
+			      	<div class="container">	
+			      		Feature : {[{ pages.geneset.allele.selected_feature.feature }]} <br>
+			      		Label : {[{ pages.geneset.allele.selected_feature.label }]} <br>
+			      		Dominance : {[{ pages.geneset.allele.selected_feature.dominance }]} <br>
+			      		Asset : <a href="#!">ae32b</a>
+			      	</div>
+			      </div>
+			      <div class="modal-footer">
+			      	Actions : &nbsp
+			        <button class="btn btn-danger" >Remove</button>
+			        <button class="btn btn-primary">Change Asset</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 			      </div>
 			    </div>
 			  </div>

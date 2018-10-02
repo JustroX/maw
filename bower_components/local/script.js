@@ -345,6 +345,12 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			});
 		}
 
+		page.allele.view_feature = (i)=>
+		{
+			page.allele.selected_feature = i;
+			$("#feature-view").modal('toggle');
+		}
+
 		page.feature.add.submit = ()=>
 		{
 			$http.post('/breeding/api/value/add',{token:token, feature:  page.feature.add, target: page.allele.target }).then((res)=>{
