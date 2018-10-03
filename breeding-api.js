@@ -85,7 +85,7 @@ exports.init = (app)=>
 
 		db.collection('user').findOne({username:username,password:password},(err,result)=>{
 			if(err) throw err;
-			console.log(password);
+			// console.log(password);
 			if(result)
 			{
 				//generate token
@@ -240,7 +240,7 @@ exports.init = (app)=>
 			{
 				if(err) throw err;
 				result = result.ops[0];
-				console.log(geneset);
+				// console.log(geneset);
 				db.collection('geneset').updateOne({_id: ObjectId(geneset._id)},{$push: { alleles: ObjectId(result._id) }  },
 				(err,result1)=>{
 					if(err) throw err;
@@ -252,7 +252,7 @@ exports.init = (app)=>
 	app.post('/breeding/api/allele/view',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let allele = req.body.id;
-			console.log(allele);
+			// console.log(allele);
 
 			db.collection('alelle').aggregate([
 				{ $match: { _id : ObjectId(allele) } },
@@ -267,7 +267,7 @@ exports.init = (app)=>
 				}
 			]).toArray((err,result)=>{
 				if(err) throw err;
-				console.log(result);
+				// console.log(result);
 				res.send(result);
 			});
 		});
@@ -292,6 +292,27 @@ exports.init = (app)=>
 			});
 		});
 	});	
+
+	app.post('/breeding/api/value/remove',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let allele = req.body.allele;
+			let feature = req.body.feature;
+			db.collection('value').deleteOne(
+			{
+				_id : ObjectId(feature)
+			},
+			(err, result)=>
+			{
+				if(err) throw err;
+				db.collection('allele').updateOne({ _id: ObjectId(allele)},{ $pull : { values : ObjectId(feature) } },
+					(err,result1)=>{
+						if(err) throw err;
+						res.send({mes: "feature deleted"});
+					});
+			});
+
+		});
+	});
 
 
 	app.post('/breeding/api/value/edit',(req,res)=>{});

@@ -309,8 +309,29 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				label : "",
 				dominance: 0,
 			},
+			delete : {
+				confirm : false
+			}
 
 		}
+
+		page.feature.press_delete = (i) =>
+		{
+			if(page.feature.delete.confirm)
+			{
+				$http.post('/breeding/api/value/remove',{token:token, allele: page.allele.target._id , feature: page.allele.selected_feature._id}).then((res)=>{
+					res = res.data;
+					if(res.err) return notify(res.err, "danger");
+					$("#feature-view").modal('toggle');
+					page.feature.delete.confirm = false;
+					page.allele.view(page.allele.target);
+
+				});
+			}
+			else
+				page.feature.delete.confirm = true;
+		}
+
 
 		page.allele.view = (i)=>
 		{
