@@ -130,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = ["geneset"];
+	$scope.location = ["asset"];
 	$scope.pages = {};
 	$scope.user = {};
 
@@ -387,9 +387,13 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.fetch();
 	});
 
+	$scope.addPage('asset', (page)=>{
+
+	});
+
 
 	//default page
-	setTimeout(()=>{$scope.goto('geneset');},1000);
+	setTimeout(()=>{$scope.goto('asset');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 
