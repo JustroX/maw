@@ -218,21 +218,18 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
-													<tr><td>Blured-eyes</td></tr>
+													<tr ng-repeat='i in pages.asset.content'>
+														<td style="cursor: pointer;" ng-click='pages.asset.view(i)'> 
+															{[{ i.label }]} 
+														</td>
+													</tr>
+													<tr><td><input class="form-control" ng-model='pages.asset.new_label' ></td></tr>
+													<tr><td ng-click='pages.asset.add()' style="text-align: center; cursor: pointer;"> <b> Add+ </b> </td></tr>
 												</tbody>
 											</table>
 
 										</div>
-										<div class="col-md-8">
+										<div class="col-md-8" ng-if='pages.asset.selected'>
 											<div class="card">
 												<div class="card-body" style="text-align: center;">
 													<br>

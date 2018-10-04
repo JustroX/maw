@@ -321,8 +321,44 @@ exports.init = (app)=>
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
 	app.post('/breeding/api/alelle/delete',(req,res)=>{});
 	
-	
-	app.post('/breeding/api/asset/add',(req,res)=>{});
+	app.post('/breeding/api/asset/',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').find({},{ projection: 
+				{
+					_id : 1,
+					label: 1,
+					position: 1,
+					scale : 1,
+					depth: 1
+				} }).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result);
+			});
+		});
+	});
+	app.post('/breeding/api/asset/add',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').insertOne(
+			{
+				label : req.body.label,
+				position: {x:0,y:0},
+				scale: {h:1,v:1},
+				depth : 1,
+				image : null
+			},(err,result)=>{
+				if(err) throw err;
+				res.send({mes: "New Asset added."});
+			});
+		});
+	});
+
+	app.post('/breeding/api/asset/load',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>{
+			// db.find
+		});
+	});
+
 	app.post('/breeding/api/asset/edit',(req,res)=>{});
 	app.post('/breeding/api/asset/delete',(req,res)=>{});
 

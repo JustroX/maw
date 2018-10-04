@@ -388,6 +388,38 @@ app.controller("dashboardController",($scope,$http,$location) => {
 	});
 
 	$scope.addPage('asset', (page)=>{
+		page.selected = null;
+		page.content = [];
+
+		page.new_label = "";
+
+		page.fetch = ()=>
+		{
+			$http.post('/breeding/api/asset',{token:token}).then((res)=>{
+				res = res.data;
+				page.content = res;
+			});
+		}
+
+		page.add = ()=>
+		{
+			$http.post('/breeding/api/asset/add',{token:token, label: page.new_label}).then((res)=>{
+				res = res.data;
+				if(res.err) return notify(res.err, "danger");
+				notify(res.mes,"success");
+				page.fetch();
+				page.new_label = "";
+			});
+		}
+
+		page.view = (i)=>
+		{
+			// $http.post('/breeding/api/asset/load')
+		}
+
+		page.fetch();
+
+
 
 	});
 
