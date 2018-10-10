@@ -362,9 +362,18 @@ exports.init = (app)=>
 			});
 		});
 	});
+	app.post('/breeding/api/asset/remove',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').deleteOne({ _id: ObjectId(req.body.id) },(err,result)=>
+			{
+				if(err) throw err;
+				res.send({mes:"Asset Succesfully Removed"});
+			});
+		});
+	});
 
 	app.post('/breeding/api/asset/edit',(req,res)=>{});
-	app.post('/breeding/api/asset/delete',(req,res)=>{});
 
 
 }

@@ -393,6 +393,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 
 		page.new_label = "";
+		page.delete_confirm = false;
 
 		page.fetch = ()=>
 		{
@@ -421,6 +422,25 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				res = res.data;
 				if(res.err) return console.log(res.err);
 				page.selected = res;
+			});
+		}
+
+		page.delete = ()=>
+		{
+			if(!page.delete_confirm)
+			{
+				page.delete_confirm = true;
+				return;
+			}
+
+			$http.post('/breeding/api/asset/remove', {token: token, id: page.selected._id}).then((res)=>
+			{
+				res = res.data;
+				page.selected = null;
+				page.content.splice( page.content.indexOf(page.selected) , 1 );
+				page.delete_confirm = false;
+				if(res.err) return console.log(res.err);
+				notify(res.mes, "success");
 			});
 		}
 

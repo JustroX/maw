@@ -272,7 +272,7 @@
 															<button class="btn btn-success">Save Asset</button> &nbsp&nbsp Save Changes
 														</div>
 														<div class="alert alert-danger">
-															<button class="btn btn-danger">Delete Asset</button> &nbsp&nbsp <b>Note: This is irreversible</b>
+															<button class="btn btn-danger" ng-click='pages.asset.delete()'>{[{ (pages.asset.delete_confirm) ? "Really?" : "Delete Asset" }]}</button> &nbsp&nbsp <b>Note: This is irreversible</b>
 														</div>
 													</div>
 												</div>
