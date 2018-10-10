@@ -240,23 +240,23 @@
 											<br>
 											<div class="card">
 												<div class="card-body">
-													<input type="text" class="form-control" placeholder="Label"> <br>
+													<input type="text" class="form-control" placeholder="Label" ng-model='pages.asset.selected.label'> <br>
 													<table class="table table-striped table-center">
 														<tr>
 															<td>&nbsp&nbsp X</td>
-															<td><input class="form-control" type="number" name=""></td>
+															<td><input class="form-control" type="number" ng-model='pages.asset.selected.position.x'></td>
 															<td>&nbsp&nbsp Y</td>
-															<td><input class="form-control" type="number" name=""></td>
+															<td><input class="form-control" type="number" ng-model='pages.asset.selected.position.y'></td>
 														</tr>
 														<tr>
 															<td><small>ScaleX</small></td>
-															<td><input class="form-control" type="number" name=""></td>
+															<td><input class="form-control" type="number" ng-model='pages.asset.selected.scale.h'></td>
 															<td><small>ScaleY</small></td>
-															<td><input class="form-control" type="number" name=""></td>
+															<td><input class="form-control" type="number" ng-model='pages.asset.selected.scale.v'></td>
 														</tr>
 														<tr>
 															<td>Depth</td>
-															<td colspan=6><input class="form-control" type="number" name=""></td>
+															<td colspan=6><input class="form-control" type="number" ng-model='pages.asset.selected.depth'></td>
 														</tr>
 													</table>
 													<div class="card">
@@ -265,6 +265,14 @@
 															    <label for="file-sprite">Upload Sprite File</label>
 															    <input type="file" class="form-control-file" id="file-sprite">
 														  	</div>
+														</div>
+													</div>
+													<div class="card card-body">
+														<div class="alert alert-success">
+															<button class="btn btn-success">Save Asset</button> &nbsp&nbsp Save Changes
+														</div>
+														<div class="alert alert-danger">
+															<button class="btn btn-danger">Delete Asset</button> &nbsp&nbsp <b>Note: This is irreversible</b>
 														</div>
 													</div>
 												</div>

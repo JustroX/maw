@@ -355,7 +355,11 @@ exports.init = (app)=>
 	app.post('/breeding/api/asset/load',(req,res)=>
 	{
 		validate("maw",req,res,(id)=>{
-			// db.find
+			db.collection('asset').findOne({ _id: ObjectId(req.body.id) },(err,result)=>
+			{
+				if(err) throw err;
+				res.send(result);
+			});
 		});
 	});
 

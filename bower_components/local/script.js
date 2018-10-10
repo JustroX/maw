@@ -391,6 +391,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.selected = null;
 		page.content = [];
 
+
 		page.new_label = "";
 
 		page.fetch = ()=>
@@ -403,6 +404,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 		page.add = ()=>
 		{
+			if(!page.new_label) return; 
 			$http.post('/breeding/api/asset/add',{token:token, label: page.new_label}).then((res)=>{
 				res = res.data;
 				if(res.err) return notify(res.err, "danger");
@@ -414,7 +416,12 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 		page.view = (i)=>
 		{
-			// $http.post('/breeding/api/asset/load')
+			$http.post('/breeding/api/asset/load',{token:token, id: i._id}).then((res)=>
+			{
+				res = res.data;
+				if(res.err) return console.log(res.err);
+				page.selected = res;
+			});
 		}
 
 		page.fetch();
