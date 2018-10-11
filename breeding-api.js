@@ -55,7 +55,6 @@ function validate(priv, req, res, f)
 exports.init = (app)=>
 {
 	// app.set('view engine','ejs');
-
 	//gui
 	app.get('/breeding/',(req,res)=>{
 		res.render('breeding-api/index',{layout:false});
@@ -373,7 +372,17 @@ exports.init = (app)=>
 		});
 	});
 
-	app.post('/breeding/api/asset/edit',(req,res)=>{});
+	app.post('/breeding/api/asset/update',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			form = req.body.form;
+			form.image =  Buffer.from(form.image,'binary').toString('base64');
+			db.collection('asset').updateOne({ _id: ObjectId(req.body.id) },{ $set : form },
+			(err, result)=>{
+				if(err) throw err;
+				res.send({ mes : "Asset Updated" });
+			});
+		});
+	});
 
 
 }

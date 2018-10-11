@@ -425,6 +425,37 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			});
 		}
 
+		page.save = () =>
+		{
+
+			 var f = document.getElementById('file-sprite').files[0],
+			     r = new FileReader();
+
+		    r.onloadend = function(e) {
+		        var data = e.target.result;
+		        // alert(data);
+				let form = 
+				{
+					label : page.selected.label,
+					position: {x: page.selected.position.x ,y: page.selected.position.y},
+					scale: {h: page.selected.scale.h ,v: page.selected.scale.v},
+					depth : page.selected.depth,
+					image : page.selected.image || data
+				};
+
+				$http.post('/breeding/api/asset/update',{token:token, id: page.selected._id, form: form}).then((res)=>
+				{
+					res= res.data;
+					if(res.err) return notify(res.err,"danger");
+					notify(res.mes,"success");
+					page.fetch();
+				});
+		    }
+
+		    r.readAsBinaryString(f);			
+
+		}
+
 		page.delete = ()=>
 		{
 			if(!page.delete_confirm)
