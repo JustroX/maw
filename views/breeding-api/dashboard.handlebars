@@ -229,11 +229,11 @@
 											</table>
 
 										</div>
-										<div class="col-md-8" ng-if='pages.asset.selected'>
+										<div class="col-md-8" ng-show='pages.asset.selected'>
 											<div class="card">
 												<div class="card-body" style="text-align: center;">
 													<br>
-													<canvas width="350px" height="350px" style="background: #dedede"></canvas>
+													<canvas id='canvas_sprite' width="350px" height="350px" style="background: #dedede"></canvas>
 													<br>
 												</div>
 											</div>
@@ -249,9 +249,9 @@
 															<td><input class="form-control" type="number" ng-model='pages.asset.selected.position.y'></td>
 														</tr>
 														<tr>
-															<td><small>ScaleX</small></td>
+															<td><small>Width</small></td>
 															<td><input class="form-control" type="number" ng-model='pages.asset.selected.scale.h'></td>
-															<td><small>ScaleY</small></td>
+															<td><small>Height</small></td>
 															<td><input class="form-control" type="number" ng-model='pages.asset.selected.scale.v'></td>
 														</tr>
 														<tr>

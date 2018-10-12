@@ -387,6 +387,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.fetch();
 	});
 
+
 	$scope.addPage('asset', (page)=>{
 		page.selected = null;
 		page.content = [];
@@ -394,6 +395,9 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 		page.new_label = "";
 		page.delete_confirm = false;
+		let renderer;
+		renderer = new MawRender(document.getElementById('canvas_sprite'));
+		renderer.loop();
 
 		page.fetch = ()=>
 		{
@@ -422,38 +426,51 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				res = res.data;
 				if(res.err) return console.log(res.err);
 				page.selected = res;
+				page.render();
 			});
 		}
 
+		page.render = ()=>
+		{
+			let img_raw = page.selected.image;
+			let img = new Image();
+			if(img_raw)
+				img.src = img_raw;
+			page.selected.image = img;
+			renderer.setImage(page.selected);
+			
+		}
+
+		document.getElementById('file-sprite').addEventListener('change', function(){
+			var f = document.getElementById('file-sprite').files[0];
+			let r = new FileReader();
+			r.onloadend = (e)=>
+			{
+				let data  =e.target.result;
+				page.selected.image.src  = data;
+			}
+			r.readAsDataURL(f);
+		},false);
+
+
 		page.save = () =>
 		{
+			let form = 
+			{
+				label : page.selected.label,
+				position: {x: page.selected.position.x ,y: page.selected.position.y},
+				scale: {h: page.selected.scale.h ,v: page.selected.scale.v},
+				depth : page.selected.depth,
+				image : page.selected.image.src,
+			};
 
-			 var f = document.getElementById('file-sprite').files[0],
-			     r = new FileReader();
-
-		    r.onloadend = function(e) {
-		        var data = e.target.result;
-		        // alert(data);
-				let form = 
-				{
-					label : page.selected.label,
-					position: {x: page.selected.position.x ,y: page.selected.position.y},
-					scale: {h: page.selected.scale.h ,v: page.selected.scale.v},
-					depth : page.selected.depth,
-					image : page.selected.image || data
-				};
-
-				$http.post('/breeding/api/asset/update',{token:token, id: page.selected._id, form: form}).then((res)=>
-				{
-					res= res.data;
-					if(res.err) return notify(res.err,"danger");
-					notify(res.mes,"success");
-					page.fetch();
-				});
-		    }
-
-		    r.readAsBinaryString(f);			
-
+			$http.post('/breeding/api/asset/update',{token:token, id: page.selected._id, form: form}).then((res)=>
+			{
+				res= res.data;
+				if(res.err) return notify(res.err,"danger");
+				notify(res.mes,"success");
+				page.fetch();
+			});
 		}
 
 		page.delete = ()=>

@@ -341,7 +341,7 @@ exports.init = (app)=>
 			{
 				label : req.body.label,
 				position: {x:0,y:0},
-				scale: {h:1,v:1},
+				scale: {h:350,v:350},
 				depth : 1,
 				image : null
 			},(err,result)=>{
@@ -375,7 +375,7 @@ exports.init = (app)=>
 	app.post('/breeding/api/asset/update',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			form = req.body.form;
-			form.image =  Buffer.from(form.image,'binary').toString('base64');
+			// form.image =  Buffer.from(form.image,'binary').toString('base64');
 			db.collection('asset').updateOne({ _id: ObjectId(req.body.id) },{ $set : form },
 			(err, result)=>{
 				if(err) throw err;
