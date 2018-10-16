@@ -130,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = ["asset"];
+	$scope.location = [""];
 	$scope.pages = {};
 	$scope.user = {};
 
@@ -291,6 +291,9 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			page.allele.load();
 		}
 
+		page.assets = [];
+		page.temp_asset = null;
+
 		page.allele = {
 			add : {
 				label: "",
@@ -311,8 +314,34 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			},
 			delete : {
 				confirm : false
+			},
+			edit:
+			{
+				form:
+				{
+					_id: null,
+					feature: "",
+					label : "",
+					dominance: 0,
+					asset: null
+				}
 			}
 
+		}
+
+		page.feature.load_assets = ()=>
+		{			
+			$http.post('/breeding/api/asset',{token:token}).then((res)=>{
+				res = res.data;
+				page.assets = res;
+			});
+		}
+
+		page.feature.load_assets();
+
+		page.feature.select_asset = ()=>
+		{
+			page.feature.edit.form.asset = page.temp_asset._id;
 		}
 
 		page.feature.press_delete = (i) =>
@@ -330,6 +359,23 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			}
 			else
 				page.feature.delete.confirm = true;
+		}
+
+		page.feature.press_submit = ()=>
+		{
+			$http.post('/breeding/api/value/edit',{token:token,form:page.feature.edit.form}).then((res)=>
+			{
+				res = res.data;
+				$("#feature-view").modal('toggle');
+				if(res.err) return notify(res.err, "danger");
+				notify(res.mes, "success");
+			});
+		}
+
+
+		page.feature.cancel_delete = (i) =>
+		{
+			page.feature.delete.confirm = false;
 		}
 
 
@@ -369,6 +415,19 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.allele.view_feature = (i)=>
 		{
 			page.allele.selected_feature = i;
+			page.feature.edit.form = i;
+
+			let f = null;
+			for(let j of page.assets)
+			{
+
+				if(j._id == i.asset )
+				{
+					f = j;
+				}
+			}
+			page.temp_asset = f; 
+
 			$("#feature-view").modal('toggle');
 		}
 
@@ -492,6 +551,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			});
 		}
 
+
 		page.fetch();
 
 
@@ -500,7 +560,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 
 	//default page
-	setTimeout(()=>{$scope.goto('asset');},1000);
+	// setTimeout(()=>{$scope.goto('');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 

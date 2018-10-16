@@ -279,7 +279,8 @@ exports.init = (app)=>
 			{
 				label : form.label,
 				feature : form.feature,
-				dominance: form.dominance
+				dominance: form.dominance,
+				asset: ""
 			},
 			(err,result)=>{
 				if(err) throw err;
@@ -314,7 +315,17 @@ exports.init = (app)=>
 	});
 
 
-	app.post('/breeding/api/value/edit',(req,res)=>{});
+	app.post('/breeding/api/value/edit',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let form = req.body.form;
+			let _id = form._id;
+			delete form._id;
+			db.collection('value').update({ _id: ObjectId(_id) },{ $set: form },(err,result)=>{
+				if(err) throw err;
+				res.send({mes:"Value updated"});
+			});
+		});
+	});
 	app.post('/breeding/api/value/delete',(req,res)=>{});
 
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
