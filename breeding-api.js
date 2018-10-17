@@ -293,6 +293,7 @@ exports.init = (app)=>
 		});
 	});	
 
+
 	app.post('/breeding/api/value/remove',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let allele = req.body.allele;
@@ -329,7 +330,23 @@ exports.init = (app)=>
 	app.post('/breeding/api/value/delete',(req,res)=>{});
 
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
-	app.post('/breeding/api/alelle/delete',(req,res)=>{});
+	app.post('/breeding/api/alelle/remove',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('alelle').findOne({_id: ObjectId(req.body.id)},(err,result)=>
+			{
+				let vals = result.values;
+				db.collection('value').remove({ _id: { $in: vals }  },(err,result1)=>
+				{
+					if(err) throw err;
+					db.collection('alelle').deleteOne({ _id: ObjectId(req.body.id) },(err,result2)=>
+					{
+						if(err) throw err;
+						res.send({mes:"Allele succesfully deleted"});
+					});
+				});
+			});
+		});
+	});
 	
 	app.post('/breeding/api/asset/',(req,res)=>{
 		validate("maw",req,res,(id)=>{

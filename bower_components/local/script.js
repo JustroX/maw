@@ -300,7 +300,10 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				mode: "allele",
 			},
 			edit : {},
-			delete: {},
+			delete: 
+			{
+
+			},
 
 			content : [],
 			features: [	],
@@ -354,7 +357,6 @@ app.controller("dashboardController",($scope,$http,$location) => {
 					$("#feature-view").modal('toggle');
 					page.feature.delete.confirm = false;
 					page.allele.view(page.allele.target);
-
 				});
 			}
 			else
@@ -389,6 +391,29 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				page.allele.features = res[0].values;
 			});
 		}
+		page.allele.press_delete = ()=>
+		{
+			if(!page.allele.confirm_delete)
+				page.allele.confirm_delete  =true;
+			else
+			{
+				$http.post("/breeding/api/alelle/remove",{token:token, id: page.allele.target._id}).then((res)=>
+				{
+					res = res.data;
+					if(res.err) return notify(res.err,"danger");
+					notify(res.mes,"success");
+					page.allele.confirm_delete = false;
+					page.allele.target = null;
+					page.allele.load();
+				});
+			}
+		}
+		page.allele.cancel_delete  =  ()=>
+		{
+			page.allele.confirm_delete  =false;
+		}
+
+
 		page.allele.load = ()=>
 		{
 			$http.post("/breeding/api/allele",{token:token, geneset: page.geneset}).then((res)=>{
@@ -430,6 +455,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 			$("#feature-view").modal('toggle');
 		}
+
 
 		page.feature.add.submit = ()=>
 		{

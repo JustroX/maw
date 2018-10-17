@@ -133,12 +133,12 @@
 													<tbody>
 														<tr style="cursor: pointer;" ng-repeat='i in pages.geneset.allele.content' ng-click='pages.geneset.allele.view(i)'><td>{[{i.label}]}</td></tr>
 													</tbody>
-													<thead>
+													<!-- <thead>
 														<tr><th>Modifiers</th></tr>
 													</thead>
 													<tbody>
 														<tr style="cursor: pointer;" ng-repeat='i in [1,2,3,4,5]'><td>Eyes</td></tr>
-													</tbody>
+													</tbody> -->
 												</table>
 											</div>
 										</div>	
@@ -178,6 +178,10 @@
 										</div>									
 									</div>
 									<br>
+									<div class="alert alert-danger" ng-if='pages.geneset.allele.target'>
+										<button type="submit"  ng-click='pages.geneset.allele.press_delete()' ng-blur='pages.geneset.allele.cancel_delete()' class="btn btn-danger">{[{ (!pages.geneset.allele.confirm_delete) ? "Delete" : "Realy?" }]}</button> Delete Selected Alelle
+									</div>
+									
 									<form class="form-inline" ng-submit='pages.geneset.allele.add.submit()'>
 										<input class="form-control form-sm"  ng-model='pages.geneset.allele.add.label' > &nbsp&nbsp
 										<select class="form-control" ng-model='pages.geneset.allele.add.mode'>
@@ -186,6 +190,7 @@
 										</select> &nbsp&nbsp
 										<button type="submit" class="btn btn-primary">Add</button>
 									</form>
+									
 									<br>
 									<br><br>
 								</div>
