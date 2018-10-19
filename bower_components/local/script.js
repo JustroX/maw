@@ -264,6 +264,24 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.name = '';
 		page.list = [];
 
+		page.delete_confirm =  false;
+		page.delete_selected = null;
+
+		page.delete = (i)=>
+		{
+			page.delete_selected  = i._id;
+			if(page.delete_confirm)
+				$http.post('/breeding/api/geneset/delete',{token:token, id: i._id }).then((res)=>{
+					res= res.data;
+					if(res.err) return notify(res.err,"danger");
+					notify(res.mes,"success");
+					page.delete_confirm = false;
+					page.fetch();
+				});
+			else
+				page.delete_confirm = true;
+		}
+
 		page.submit = ()=>
 		{
 			$http.post('/breeding/api/geneset/add',{token:token,name: page.name}).then((res)=>{
@@ -459,6 +477,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 		page.feature.add.submit = ()=>
 		{
+			if(page.allele.target)
 			$http.post('/breeding/api/value/add',{token:token, feature:  page.feature.add, target: page.allele.target }).then((res)=>{
 				res = res.data;
 				if(res.err) return notify(res.err,"danger");
@@ -467,6 +486,8 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				page.feature.add.dominance = "";
 				page.allele.view( page.allele.target );
 			});
+			else
+			alert("Please select an alelle first.");
 		}
 
 		page.fetch();

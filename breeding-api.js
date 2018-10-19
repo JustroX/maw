@@ -200,7 +200,54 @@ exports.init = (app)=>
 
 
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
-	app.post('/breeding/api/geneset/delete',(req,res)=>{});
+	app.post('/breeding/api/geneset/delete',(req,res)=>{
+		validate("maw",req,res,(id)=>
+		{
+			let target_id = req.body.id;
+			// db.collection('geneset').findOne({ _id: ObjectId(target_id) },(err,result)=>
+			// {
+			// 	if(err) throw err;
+			// 	let alelles = result.alelles;
+				//delete allelles 
+				//delete values
+			console.log(target_id);
+			db.collection('alelle').aggregate(
+			[
+				{ $match: { "geneset._id": target_id  } },
+				{ $unwind:  "$values" },
+				{ $group: {
+					            _id: "$geneset._id",
+					            values: { $push : "$values"},
+					        } }
+			]).toArray((err,result)=>
+			{
+				if(err) throw err;
+
+				let values = [];
+				if(result.length!=0)
+					values = result[0].values;
+				for (let i in values)
+				{
+					values[i] = ObjectId(values[i])
+				}
+				console.log(values);
+				db.collection('value').remove({ _id: {$in : values} },(err,result1)=>
+				{
+					if(err) throw err;
+					db.collection('alelle').remove({ "geneset._id": target_id },(err,result2)=>
+					{
+						if(err) throw err;
+						db.collection('geneset').deleteOne({ _id: ObjectId(target_id) },(err,result3)=>
+						{
+							if(err) throw err;
+							res.send({mes:"Genset has been succesfully deleted"});
+						});
+					});
+				});
+			});
+			// });
+		});
+	});
 
 	app.post('/breeding/api/allele',(req,res)=>{
 		validate("maw",req,res,(id)=>{
@@ -329,6 +376,11 @@ exports.init = (app)=>
 	});
 	app.post('/breeding/api/value/delete',(req,res)=>{});
 
+	// function deleteAlelle()
+	// {
+				
+	// }
+
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
 	app.post('/breeding/api/alelle/remove',(req,res)=>{
 		validate("maw",req,res,(id)=>{
@@ -411,6 +463,7 @@ exports.init = (app)=>
 			});
 		});
 	});
+
 
 
 }

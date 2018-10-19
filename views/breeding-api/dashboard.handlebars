@@ -109,7 +109,7 @@
 										</form>
 									</p>
 									<ol>
-										<li ng-repeat='i in pages.geneset.list' > <a href="javascript:void(0)" ng-click='pages.geneset.view(i)'> {[{ i.label }]}</a> &nbsp&nbsp  &nbsp&nbsp <a ng-click='pages.geneset.delete()' style="color: red" href="javascript:void(0)">Delete</a>  </li>
+										<li ng-repeat='i in pages.geneset.list' > <a href="javascript:void(0)" ng-click='pages.geneset.view(i)'> {[{ i.label }]}</a> &nbsp&nbsp  &nbsp&nbsp <a ng-click='pages.geneset.delete(i)' style="color: red" href="javascript:void(0)">{[{ (pages.geneset.delete_confirm && pages.geneset.delete_selected == i._id ) ? "Really?" : "Delete" }]}</a> </li>
 									</ol>
 								</div>
 							</div>
