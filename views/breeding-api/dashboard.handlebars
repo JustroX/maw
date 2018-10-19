@@ -29,11 +29,11 @@
 							<div class="card-body">	
 								<b>	References </b> <br>	
 								<ul>
-									<li>Maw Structure</li>
-									<li>About</li>
-									<li>Contact Information</li>
-									<li>Privacy Policy</li>
-									<li>Terms and Conditions</li>
+									<li> <a href="javascript:void(0)" ng-click='goto("references/maw")' >  Maw Structure </a> </li>
+									<li> <a href="javascript:void(0)" ng-click='goto("references/about")' >  About </a> </li>
+									<li> <a href="javascript:void(0)" ng-click='goto("references/contact")' >  Contact Information </a> </li>
+									<li> <a href="javascript:void(0)" ng-click='goto("references/privacy")' >  Privacy Policy </a> </li>
+									<li> <a href="javascript:void(0)" ng-click='goto("references/terms")' >  Terms and Conditions </a> </li>
 								</ul>
 							</div>			
 					</div>	<br>	
@@ -319,6 +319,106 @@
 						</div>
 						<br><br><br>
 					</div>
+
+					<div ng-if='is_here("references")'>
+						<br>
+						<div class="card" ng-if='is_here("references/maw")'>
+							<div class="card-body">
+								<div class="container">
+									<h2>Maw Structure</h2>
+									<p>
+										<h4>Definition of Terms  </h4>
+
+										Purpose: to eliminate ambiguity <br>
+
+										<ul>
+										 <li>
+										 	<b>alelle</b> : property of a Maw  ( e.g. eyes, mouth , accessories  )
+										 </li>
+										 <li>
+										 	<b>feature</b>: specific value of an <b>allele</b> <br>
+											( e.g. <b>allele</b>: eyes, <b>feature</b>: <i>big</i> eyes  )
+										 </li>
+										 <li>
+										 	<b>value</b>: hash/1-digit hexadecimal representation of a <b>feature</b> <br>
+												e.g. <br>
+												<ol>
+													<li>
+														<b>feature</b>: big eyes , <b>value</b>: <i>a</i> 
+													</li>
+													<li>
+														<b>feature</b>: small eyes , <b>value</b>: <i>b</i>
+													</li>
+												</ol>
+										 </li>
+										 <li>
+										 	<b>genotype</b> : breed of 2 <b>values</b> / <b>feature</b> ; 2-digit hexadecimal representation <br>
+												e.g. <br>
+												<b>value A</b>: 1 , <b>value</b>: a, <b>genotype</b>:  1a 
+										 </li>
+										 <li>
+										 	<b>phenotype</b> : physical representation of a <b>genotype</b> <br> 
+												e.g. <br>
+												<ol>
+													<li>
+														 <b>feature1</b>: big eyes , <b>value1</b>: <i>a</i> , <b>dominance</b>: 2
+													</li>
+													<li>
+														 <b>feature2</b>: small eyes , <b>value2</b>: <i>1</i> , <b>dominance</b>: 1
+													</li>
+												</ol>
+												<i>after breeding</i> <br>
+												<b>genotype</b>: <i>a1</i>, <b>phenotype</b>: <i>big eyes</i> (since <b>feature</b> is more dominant than <b>feature</b>. <i>see Functions for breeding method</i>)
+										 </li>
+										 <li>
+										 		<b>gene</b> : collection of <b>genotypes</b><br>
+												e.g. <br>
+												23a2e3b1e1 (<i>gene that is composed of 5 <b>genotypes</b> </i>) <br>
+												7fae (<i>gene that is composed of 2 <b>genotypes</b> </i>) <br>
+										 </li>
+										 <li>
+										 		<b>Geneset</b> : collection of unique representation of <b>features</b> and <b>allele</b> <br>
+												counterexample <br>
+												same <b>genes</b> in a different <b>genesets</b> can have different <b>phenotypes</b> 
+										 </li>
+											
+										</ul>
+
+
+
+										<h4>Object Properties </h4>
+
+										Purpose: to help define database objects <br>
+										<i>this is subject to change upon development</i> <br>
+
+										Primary
+										<ol>
+											<li> <b>maw</b>  = { id:int , gene:str , owner: <i>user</i>.id , generation: int }</li>
+											<li> <b>user</b> =  { id:int , username:str , password:str , email:str , maws: [ <i>maw</i>.id ] , priv: str }</li>
+										</ol>
+
+										Breeding API
+										<ol>
+											<li> <b>value </b> =   { id: int , label:str , feature:str , asset: asset.id , dominance: float }  </li>
+											<li> <b>alelle </b> =   { id: int , label:str , values: [<i>value</i>] , type: int , geneset: geneset }</li>
+											<li> <b>geneset </b> = { id: int, label: str , alelles: [<i>alelle</i>]  }</li>
+											<li> <b>asset </b> =   { id: int , label: str, image: BLOB , position: { x:int , y: int } , scale: {h:float , v: float} ,depth: int } </li>
+										</ol>
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="card" ng-if='is_here("references/about")'>
+							<div class="card-body">
+								<h3>About</h3>
+								<p>
+									Maw 
+								</p>
+							</div>
+						</div>
+					</div>
+
 
 				</div>
 		</div>

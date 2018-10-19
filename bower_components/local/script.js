@@ -110,10 +110,10 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 	$scope.is_here = (path) =>
 	{
-		var same = false;
+		var same = true;
 		path = path.split('/');
 		for(let i in path)
-			same |= (path[i] == $scope.location[i]);	
+			same &= (path[i] == $scope.location[i]);	
 		return same;
 	}
 	$scope.goto = (path) =>
@@ -130,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = ["render"];
+	$scope.location = [""];
 	$scope.pages = {};
 	$scope.user = {};
 
