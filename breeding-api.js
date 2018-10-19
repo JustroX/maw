@@ -465,6 +465,48 @@ exports.init = (app)=>
 	});
 
 
+	app.post('/breeding/api/render',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>
+		{
+			let geneset = req.body.geneset;
+			let pos = req.body.pos;
+			let value = req.body.value;
+
+			//load geneset
+			db.collection('geneset').findOne({_id:ObjectId(geneset)},(err,set)=>
+			{
+				let allele =  set.alleles[pos];
+				if(err) throw err;				
+				if(allele)
+				db.collection('alelle').findOne({_id:allele},(err,result)=>
+				{
+					if(err) throw err;
+
+					let values  =  result.values;
+					for(let i in values)
+					{
+						values[i] = ObjectId(values[i]);
+					}
+					db.collection('value').findOne({ _id: {$in : values} , label: value },(err,result2)=>
+					{
+						if(err) throw err;
+						if(result2)
+						db.collection('asset').findOne({ _id: ObjectId(result2.asset)},(err,asset)=>
+						{
+							if(err) throw err;
+							res.send(asset);
+						});
+					});
+				});
+				else
+					res.send({ err: "Unexpected error occured." });
+			});		
+
+		});
+	});
+
+
 
 }
 

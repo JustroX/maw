@@ -130,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = [""];
+	$scope.location = ["render"];
 	$scope.pages = {};
 	$scope.user = {};
 
@@ -493,6 +493,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.fetch();
 	});
 
+	let renderer = new MawRender();
 
 	$scope.addPage('asset', (page)=>{
 		page.selected = null;
@@ -501,9 +502,20 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 		page.new_label = "";
 		page.delete_confirm = false;
-		let renderer;
-		renderer = new MawRender(document.getElementById('canvas_sprite'));
-		renderer.loop();
+
+		let add_renderer = ()=>
+		{
+			if(document.getElementById('canvas_sprite'))
+			{
+				renderer.setCanvas(document.getElementById('canvas_sprite'));
+				renderer.loop();
+			}
+			else
+				setTimeout(()=>{add_renderer()},1000);
+		}
+
+		add_renderer();
+
 
 		page.fetch = ()=>
 		{
@@ -543,21 +555,33 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			if(img_raw)
 				img.src = img_raw;
 			page.selected.image = img;
+
+			if(renderer)
 			renderer.setImage(page.selected);
 			
 		}
 
-		document.getElementById('file-sprite').addEventListener('change', function(){
-			var f = document.getElementById('file-sprite').files[0];
-			let r = new FileReader();
-			r.onloadend = (e)=>
+		let x = addlistener = ()=>
+		{
+			if(document.getElementById('file-sprite'))
 			{
-				let data  =e.target.result;
-				page.selected.image.src  = data;
+				document.getElementById('file-sprite').addEventListener('change', function(){
+					var f = document.getElementById('file-sprite').files[0];
+					let r = new FileReader();
+					r.onloadend = (e)=>
+					{
+						let data  =e.target.result;
+						page.selected.image.src  = data;
+					}
+					r.readAsDataURL(f);
+				},false);
 			}
-			r.readAsDataURL(f);
-		},false);
+			else
+				setTimeout(()=>{addlistener();},1000);
+		}
 
+
+		addlistener();
 
 		page.save = () =>
 		{
@@ -600,14 +624,33 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 
 		page.fetch();
+	});
 
+	$scope.addPage('render',(page)=>
+	{
+		page.genesets = [];
+		page.geneset = null;
+		page.genes = "";
 
+		$http.post('/breeding/api/geneset',{token:token}).then((res)=>
+		{
+			res = res.data;
+			page.genesets = res;
+		});
+
+		page.render = ()=>
+		{
+			let local = new MawRenderLib(page.geneset._id);
+			local.addCanvas( document.getElementById('render-api-canvas') );
+			local.render(page.genes, $http ,token);
+
+		}
 
 	});
 
 
 	//default page
-	// setTimeout(()=>{$scope.goto('');},1000);
+	// setTimeout(()=>{$scope.goto('render');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 

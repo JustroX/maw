@@ -21,6 +21,7 @@
 								<ul>
 									<li> <a href="javascript:void(0)" ng-click='goto("geneset")'>Geneset</a> </li>
 									<li> <a href="javascript:void(0)" ng-click='goto("asset")'>Assets</a></li>
+									<li> <a href="javascript:void(0)" ng-click='goto("render")'>Render</a></li>
 								</ul>
 							</div>	
 					</div>	<br>	
@@ -289,6 +290,34 @@
 							</div>
 						</div>
 							<br><br><br><br>
+					</div>
+
+					<div ng-if='is_here("render")'>
+						<br>
+						<div class="card">
+							<div class="card-body">
+								<div class="container">
+									<h4>Render API</h4>
+									<p>Please input genes to render Maw</p>
+									<div class="row">
+										<div class="col-md-6">
+											<canvas width="350px" height="350px"  id='render-api-canvas' style="width: 350px; height: 350px; background-color: #dedede; border-radius: 4px" ></canvas>
+										</div>
+										<div class="col-md-6">
+											<div class="container">
+												Please Input Genes
+												<input type="text" ng-model='pages.render.genes' class="form-control"> <br>
+												Select Geneset
+												<select class="form-control" ng-model='pages.render.geneset' ng-options='x.label for x in pages.render.genesets '></select>
+												<br>
+												<button class="btn btn-success" ng-click='pages.render.render()'>Render</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br><br><br>
 					</div>
 
 				</div>
