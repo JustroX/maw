@@ -55,7 +55,6 @@ function validate(priv, req, res, f)
 exports.init = (app)=>
 {
 	// app.set('view engine','ejs');
-
 	//gui
 	app.get('/breeding/',(req,res)=>{
 		res.render('breeding-api/index',{layout:false});
@@ -85,7 +84,7 @@ exports.init = (app)=>
 
 		db.collection('user').findOne({username:username,password:password},(err,result)=>{
 			if(err) throw err;
-			console.log(password);
+			// console.log(password);
 			if(result)
 			{
 				//generate token
@@ -201,7 +200,54 @@ exports.init = (app)=>
 
 
 	app.post('/breeding/api/geneset/edit',(req,res)=>{});
-	app.post('/breeding/api/geneset/delete',(req,res)=>{});
+	app.post('/breeding/api/geneset/delete',(req,res)=>{
+		validate("maw",req,res,(id)=>
+		{
+			let target_id = req.body.id;
+			// db.collection('geneset').findOne({ _id: ObjectId(target_id) },(err,result)=>
+			// {
+			// 	if(err) throw err;
+			// 	let alelles = result.alelles;
+				//delete allelles 
+				//delete values
+			console.log(target_id);
+			db.collection('alelle').aggregate(
+			[
+				{ $match: { "geneset._id": target_id  } },
+				{ $unwind:  "$values" },
+				{ $group: {
+					            _id: "$geneset._id",
+					            values: { $push : "$values"},
+					        } }
+			]).toArray((err,result)=>
+			{
+				if(err) throw err;
+
+				let values = [];
+				if(result.length!=0)
+					values = result[0].values;
+				for (let i in values)
+				{
+					values[i] = ObjectId(values[i])
+				}
+				console.log(values);
+				db.collection('value').remove({ _id: {$in : values} },(err,result1)=>
+				{
+					if(err) throw err;
+					db.collection('alelle').remove({ "geneset._id": target_id },(err,result2)=>
+					{
+						if(err) throw err;
+						db.collection('geneset').deleteOne({ _id: ObjectId(target_id) },(err,result3)=>
+						{
+							if(err) throw err;
+							res.send({mes:"Genset has been succesfully deleted"});
+						});
+					});
+				});
+			});
+			// });
+		});
+	});
 
 	app.post('/breeding/api/allele',(req,res)=>{
 		validate("maw",req,res,(id)=>{
@@ -240,7 +286,7 @@ exports.init = (app)=>
 			{
 				if(err) throw err;
 				result = result.ops[0];
-				console.log(geneset);
+				// console.log(geneset);
 				db.collection('geneset').updateOne({_id: ObjectId(geneset._id)},{$push: { alleles: ObjectId(result._id) }  },
 				(err,result1)=>{
 					if(err) throw err;
@@ -252,10 +298,22 @@ exports.init = (app)=>
 	app.post('/breeding/api/allele/view',(req,res)=>{
 		validate("maw",req,res,(id)=>{
 			let allele = req.body.id;
-			console.log(allele);
-			db.collection('alelle').find({_id: ObjectId(allele)},{}).toArray((err,result)=>{
+			// console.log(allele);
+
+			db.collection('alelle').aggregate([
+				{ $match: { _id : ObjectId(allele) } },
+				{
+					$lookup:
+					{
+						from: 'value',
+						localField: 'values',
+						foreignField: '_id',
+						as: 'values'
+					} 
+				}
+			]).toArray((err,result)=>{
 				if(err) throw err;
-				console.log(result);
+				// console.log(result);
 				res.send(result);
 			});
 		});
@@ -268,7 +326,8 @@ exports.init = (app)=>
 			{
 				label : form.label,
 				feature : form.feature,
-				dominance: form.dominance
+				dominance: form.dominance,
+				asset: ""
 			},
 			(err,result)=>{
 				if(err) throw err;
@@ -282,16 +341,171 @@ exports.init = (app)=>
 	});	
 
 
-	app.post('/breeding/api/value/edit',(req,res)=>{});
+	app.post('/breeding/api/value/remove',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let allele = req.body.allele;
+			let feature = req.body.feature;
+			db.collection('value').deleteOne(
+			{
+				_id : ObjectId(feature)
+			},
+			(err, result)=>
+			{
+				if(err) throw err;
+				db.collection('allele').updateOne({ _id: ObjectId(allele)},{ $pull : { values : ObjectId(feature) } },
+					(err,result1)=>{
+						if(err) throw err;
+						res.send({mes: "feature deleted"});
+					});
+			});
+
+		});
+	});
+
+
+	app.post('/breeding/api/value/edit',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			let form = req.body.form;
+			let _id = form._id;
+			delete form._id;
+			db.collection('value').update({ _id: ObjectId(_id) },{ $set: form },(err,result)=>{
+				if(err) throw err;
+				res.send({mes:"Value updated"});
+			});
+		});
+	});
 	app.post('/breeding/api/value/delete',(req,res)=>{});
 
+	// function deleteAlelle()
+	// {
+				
+	// }
+
 	app.post('/breeding/api/alelle/edit',(req,res)=>{});
-	app.post('/breeding/api/alelle/delete',(req,res)=>{});
+	app.post('/breeding/api/alelle/remove',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('alelle').findOne({_id: ObjectId(req.body.id)},(err,result)=>
+			{
+				let vals = result.values;
+				db.collection('value').remove({ _id: { $in: vals }  },(err,result1)=>
+				{
+					if(err) throw err;
+					db.collection('alelle').deleteOne({ _id: ObjectId(req.body.id) },(err,result2)=>
+					{
+						if(err) throw err;
+						res.send({mes:"Allele succesfully deleted"});
+					});
+				});
+			});
+		});
+	});
 	
-	
-	app.post('/breeding/api/asset/add',(req,res)=>{});
-	app.post('/breeding/api/asset/edit',(req,res)=>{});
-	app.post('/breeding/api/asset/delete',(req,res)=>{});
+	app.post('/breeding/api/asset/',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').find({},{ projection: 
+				{
+					_id : 1,
+					label: 1,
+					position: 1,
+					scale : 1,
+					depth: 1
+				} }).toArray((err,result)=>{
+				if(err) throw err;
+				res.send(result);
+			});
+		});
+	});
+	app.post('/breeding/api/asset/add',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').insertOne(
+			{
+				label : req.body.label,
+				position: {x:0,y:0},
+				scale: {h:350,v:350},
+				depth : 1,
+				image : null
+			},(err,result)=>{
+				if(err) throw err;
+				res.send({mes: "New Asset added."});
+			});
+		});
+	});
+
+	app.post('/breeding/api/asset/load',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').findOne({ _id: ObjectId(req.body.id) },(err,result)=>
+			{
+				if(err) throw err;
+				res.send(result);
+			});
+		});
+	});
+	app.post('/breeding/api/asset/remove',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>{
+			db.collection('asset').deleteOne({ _id: ObjectId(req.body.id) },(err,result)=>
+			{
+				if(err) throw err;
+				res.send({mes:"Asset Succesfully Removed"});
+			});
+		});
+	});
+
+	app.post('/breeding/api/asset/update',(req,res)=>{
+		validate("maw",req,res,(id)=>{
+			form = req.body.form;
+			// form.image =  Buffer.from(form.image,'binary').toString('base64');
+			db.collection('asset').updateOne({ _id: ObjectId(req.body.id) },{ $set : form },
+			(err, result)=>{
+				if(err) throw err;
+				res.send({ mes : "Asset Updated" });
+			});
+		});
+	});
+
+
+	app.post('/breeding/api/render',(req,res)=>
+	{
+		validate("maw",req,res,(id)=>
+		{
+			let geneset = req.body.geneset;
+			let pos = req.body.pos;
+			let value = req.body.value;
+
+			//load geneset
+			db.collection('geneset').findOne({_id:ObjectId(geneset)},(err,set)=>
+			{
+				let allele =  set.alleles[pos];
+				if(err) throw err;				
+				if(allele)
+				db.collection('alelle').findOne({_id:allele},(err,result)=>
+				{
+					if(err) throw err;
+
+					let values  =  result.values;
+					for(let i in values)
+					{
+						values[i] = ObjectId(values[i]);
+					}
+					db.collection('value').findOne({ _id: {$in : values} , label: value },(err,result2)=>
+					{
+						if(err) throw err;
+						if(result2)
+						db.collection('asset').findOne({ _id: ObjectId(result2.asset)},(err,asset)=>
+						{
+							if(err) throw err;
+							res.send(asset);
+						});
+					});
+				});
+				else
+					res.send({ err: "Unexpected error occured." });
+			});		
+
+		});
+	});
+
 
 
 }

@@ -110,10 +110,10 @@ app.controller("dashboardController",($scope,$http,$location) => {
 
 	$scope.is_here = (path) =>
 	{
-		var same = false;
+		var same = true;
 		path = path.split('/');
 		for(let i in path)
-			same |= (path[i] == $scope.location[i]);	
+			same &= (path[i] == $scope.location[i]);	
 		return same;
 	}
 	$scope.goto = (path) =>
@@ -130,7 +130,7 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		};
 	}
 
-	$scope.location = ["geneset"];
+	$scope.location = [""];
 	$scope.pages = {};
 	$scope.user = {};
 
@@ -264,6 +264,24 @@ app.controller("dashboardController",($scope,$http,$location) => {
 		page.name = '';
 		page.list = [];
 
+		page.delete_confirm =  false;
+		page.delete_selected = null;
+
+		page.delete = (i)=>
+		{
+			page.delete_selected  = i._id;
+			if(page.delete_confirm)
+				$http.post('/breeding/api/geneset/delete',{token:token, id: i._id }).then((res)=>{
+					res= res.data;
+					if(res.err) return notify(res.err,"danger");
+					notify(res.mes,"success");
+					page.delete_confirm = false;
+					page.fetch();
+				});
+			else
+				page.delete_confirm = true;
+		}
+
 		page.submit = ()=>
 		{
 			$http.post('/breeding/api/geneset/add',{token:token,name: page.name}).then((res)=>{
@@ -291,18 +309,22 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			page.allele.load();
 		}
 
+		page.assets = [];
+		page.temp_asset = null;
+
 		page.allele = {
 			add : {
 				label: "",
 				mode: "allele",
 			},
 			edit : {},
-			delete: {},
+			delete: 
+			{
+
+			},
 
 			content : [],
-			features: [
-				{label: "a" , feature:"try", dominance: 2}
-			],
+			features: [	],
 		};
 
 		page.feature = {
@@ -311,8 +333,71 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				label : "",
 				dominance: 0,
 			},
+			delete : {
+				confirm : false
+			},
+			edit:
+			{
+				form:
+				{
+					_id: null,
+					feature: "",
+					label : "",
+					dominance: 0,
+					asset: null
+				}
+			}
 
 		}
+
+		page.feature.load_assets = ()=>
+		{			
+			$http.post('/breeding/api/asset',{token:token}).then((res)=>{
+				res = res.data;
+				page.assets = res;
+			});
+		}
+
+		page.feature.load_assets();
+
+		page.feature.select_asset = ()=>
+		{
+			page.feature.edit.form.asset = page.temp_asset._id;
+		}
+
+		page.feature.press_delete = (i) =>
+		{
+			if(page.feature.delete.confirm)
+			{
+				$http.post('/breeding/api/value/remove',{token:token, allele: page.allele.target._id , feature: page.allele.selected_feature._id}).then((res)=>{
+					res = res.data;
+					if(res.err) return notify(res.err, "danger");
+					$("#feature-view").modal('toggle');
+					page.feature.delete.confirm = false;
+					page.allele.view(page.allele.target);
+				});
+			}
+			else
+				page.feature.delete.confirm = true;
+		}
+
+		page.feature.press_submit = ()=>
+		{
+			$http.post('/breeding/api/value/edit',{token:token,form:page.feature.edit.form}).then((res)=>
+			{
+				res = res.data;
+				$("#feature-view").modal('toggle');
+				if(res.err) return notify(res.err, "danger");
+				notify(res.mes, "success");
+			});
+		}
+
+
+		page.feature.cancel_delete = (i) =>
+		{
+			page.feature.delete.confirm = false;
+		}
+
 
 		page.allele.view = (i)=>
 		{
@@ -324,6 +409,29 @@ app.controller("dashboardController",($scope,$http,$location) => {
 				page.allele.features = res[0].values;
 			});
 		}
+		page.allele.press_delete = ()=>
+		{
+			if(!page.allele.confirm_delete)
+				page.allele.confirm_delete  =true;
+			else
+			{
+				$http.post("/breeding/api/alelle/remove",{token:token, id: page.allele.target._id}).then((res)=>
+				{
+					res = res.data;
+					if(res.err) return notify(res.err,"danger");
+					notify(res.mes,"success");
+					page.allele.confirm_delete = false;
+					page.allele.target = null;
+					page.allele.load();
+				});
+			}
+		}
+		page.allele.cancel_delete  =  ()=>
+		{
+			page.allele.confirm_delete  =false;
+		}
+
+
 		page.allele.load = ()=>
 		{
 			$http.post("/breeding/api/allele",{token:token, geneset: page.geneset}).then((res)=>{
@@ -347,23 +455,202 @@ app.controller("dashboardController",($scope,$http,$location) => {
 			});
 		}
 
+		page.allele.view_feature = (i)=>
+		{
+			page.allele.selected_feature = i;
+			page.feature.edit.form = i;
+
+			let f = null;
+			for(let j of page.assets)
+			{
+
+				if(j._id == i.asset )
+				{
+					f = j;
+				}
+			}
+			page.temp_asset = f; 
+
+			$("#feature-view").modal('toggle');
+		}
+
+
 		page.feature.add.submit = ()=>
 		{
+			if(page.allele.target)
 			$http.post('/breeding/api/value/add',{token:token, feature:  page.feature.add, target: page.allele.target }).then((res)=>{
 				res = res.data;
 				if(res.err) return notify(res.err,"danger");
 				page.feature.add.feature = "";
 				page.feature.add.label = "";
 				page.feature.add.dominance = "";
+				page.allele.view( page.allele.target );
 			});
+			else
+			alert("Please select an alelle first.");
 		}
 
 		page.fetch();
 	});
 
+	let renderer = new MawRender();
+
+	$scope.addPage('asset', (page)=>{
+		page.selected = null;
+		page.content = [];
+
+
+		page.new_label = "";
+		page.delete_confirm = false;
+
+		let add_renderer = ()=>
+		{
+			if(document.getElementById('canvas_sprite'))
+			{
+				renderer.setCanvas(document.getElementById('canvas_sprite'));
+				renderer.loop();
+			}
+			else
+				setTimeout(()=>{add_renderer()},1000);
+		}
+
+		add_renderer();
+
+
+		page.fetch = ()=>
+		{
+			$http.post('/breeding/api/asset',{token:token}).then((res)=>{
+				res = res.data;
+				page.content = res;
+			});
+		}
+
+		page.add = ()=>
+		{
+			if(!page.new_label) return; 
+			$http.post('/breeding/api/asset/add',{token:token, label: page.new_label}).then((res)=>{
+				res = res.data;
+				if(res.err) return notify(res.err, "danger");
+				notify(res.mes,"success");
+				page.fetch();
+				page.new_label = "";
+			});
+		}
+
+		page.view = (i)=>
+		{
+			$http.post('/breeding/api/asset/load',{token:token, id: i._id}).then((res)=>
+			{
+				res = res.data;
+				if(res.err) return console.log(res.err);
+				page.selected = res;
+				page.render();
+			});
+		}
+
+		page.render = ()=>
+		{
+			let img_raw = page.selected.image;
+			let img = new Image();
+			if(img_raw)
+				img.src = img_raw;
+			page.selected.image = img;
+
+			if(renderer)
+			renderer.setImage(page.selected);
+			
+		}
+
+		let x = addlistener = ()=>
+		{
+			if(document.getElementById('file-sprite'))
+			{
+				document.getElementById('file-sprite').addEventListener('change', function(){
+					var f = document.getElementById('file-sprite').files[0];
+					let r = new FileReader();
+					r.onloadend = (e)=>
+					{
+						let data  =e.target.result;
+						page.selected.image.src  = data;
+					}
+					r.readAsDataURL(f);
+				},false);
+			}
+			else
+				setTimeout(()=>{addlistener();},1000);
+		}
+
+
+		addlistener();
+
+		page.save = () =>
+		{
+			let form = 
+			{
+				label : page.selected.label,
+				position: {x: page.selected.position.x ,y: page.selected.position.y},
+				scale: {h: page.selected.scale.h ,v: page.selected.scale.v},
+				depth : page.selected.depth,
+				image : page.selected.image.src,
+			};
+
+			$http.post('/breeding/api/asset/update',{token:token, id: page.selected._id, form: form}).then((res)=>
+			{
+				res= res.data;
+				if(res.err) return notify(res.err,"danger");
+				notify(res.mes,"success");
+				page.fetch();
+			});
+		}
+
+		page.delete = ()=>
+		{
+			if(!page.delete_confirm)
+			{
+				page.delete_confirm = true;
+				return;
+			}
+
+			$http.post('/breeding/api/asset/remove', {token: token, id: page.selected._id}).then((res)=>
+			{
+				res = res.data;
+				page.selected = null;
+				page.content.splice( page.content.indexOf(page.selected) , 1 );
+				page.delete_confirm = false;
+				if(res.err) return console.log(res.err);
+				notify(res.mes, "success");
+			});
+		}
+
+
+		page.fetch();
+	});
+
+	$scope.addPage('render',(page)=>
+	{
+		page.genesets = [];
+		page.geneset = null;
+		page.genes = "";
+
+		$http.post('/breeding/api/geneset',{token:token}).then((res)=>
+		{
+			res = res.data;
+			page.genesets = res;
+		});
+
+		page.render = ()=>
+		{
+			let local = new MawRenderLib(page.geneset._id);
+			local.addCanvas( document.getElementById('render-api-canvas') );
+			local.render(page.genes, $http ,token);
+
+		}
+
+	});
+
 
 	//default page
-	setTimeout(()=>{$scope.goto('geneset');},1000);
+	// setTimeout(()=>{$scope.goto('render');},1000);
 
 	//open token
 	if(!cookie.get('breeding-api-auth-token')) 
