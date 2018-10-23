@@ -12,7 +12,7 @@ const User = mongoose.model('users');
 
 //User Login Route
 router.get('/login', (req,res) => {
-    res.render('users/login');
+    res.render('users/login',{login:true});
 });
 
 //login form POST
@@ -27,7 +27,7 @@ router.post('/login', (req,res,next) => {
 
 //user register route
 router.get('/register', (req,res) => {
-    res.render('users/register');
+    res.render('users/register',{login:true});
 });
 
 //Register form POST

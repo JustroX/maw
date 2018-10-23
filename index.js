@@ -16,8 +16,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const bodyParser= require('body-parser');
-
+const bodyParser = require('body-parser');
 const app = express();
 
 
@@ -80,7 +79,7 @@ app.use(function(req,res,next){
 
 //index route
 app.get('/', (req,res) => {
-    res.render('index');
+    res.render('index',{login:false});
 });
 
 

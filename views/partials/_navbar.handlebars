@@ -1,14 +1,15 @@
-{{! you started here
-you edited the one that has comments.. so far gumagana siya.. ok na yung scroll spy ayusin mo lang.. tas lagay ka na rin ng details para bukas}}
-
-<nav class="navbar nav-pills navbar-expand-sm  navbar-dark bg-dark fixed-top">
+<nav class="navbar nav-pills navbar-expand-sm  navbar-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Maw</a>
+            {{#if login}}
+            <a class="navbar-brand" href="#"><img src="/img/Mawmouth.png" width="30" height="30"  class="d-inline-block align-top">
+             Maw</a>  
+             {{else}}
+            <a class="navbar-brand" href="/"><img src="/img/Mawmouth.png" width="30" height="30"  class="d-inline-block align-top">
+             Maw</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
@@ -21,11 +22,16 @@ you edited the one that has comments.. so far gumagana siya.. ok na yung scroll 
                         <a class="nav-link" href="#About">About</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#Cta">What to do?</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#Contact">Contact</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ml-auto">
-                    {{#if user}}
+                {{/if}}
+
+                <ul class="navbar-nav ml-auto"> 
+                    {{#if user}}  
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"
                         id="navbarDropdownMenuLink">Maw stuff</a> {{! here}}
